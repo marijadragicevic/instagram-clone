@@ -12,5 +12,5 @@ To preview this app, please follow these steps:
    2. Set up emulators on your PC and run either an 'a' command (for Android) or an 'i' command (for iOS) in your terminal. Please note that if you have a Linux or Windows operating system, iOS emulators are not available.
    3. Open the app in a web browser by running the 'w' command in your terminal. ( not available yet)
 
-These options provide different ways to access and interact with the app depending on your device and development setup
+These options provide different ways to access and interact with the app depending on your device and development setup.
 Please note that you will need to have Git and Node.js (including npm) installed on your machine for these commands to work properly.
