@@ -73,7 +73,7 @@ const LocationPickerScreen = ({ navigation, route }) => {
   const getLocationAdress = async (lat, long) => {
     if (pickedLocation) {
       const address = await getAddress(lat, long);
-      console.log(address, "<---adresa");
+      // console.log(address, "<---adresa");
       setAddress(address);
     }
   };

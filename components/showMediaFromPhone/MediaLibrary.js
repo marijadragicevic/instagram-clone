@@ -1,37 +1,39 @@
+import { useEffect, useState } from "react";
 import {
   View,
   Text,
   FlatList,
   Pressable,
   useWindowDimensions,
+  Image,
 } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+
 import {
   requestPermissionsAsync,
   getAlbumAsync,
   getAssetsAsync,
   getAlbumsAsync,
-  MediaType
 } from "expo-media-library";
-import { useEffect, useState } from "react";
-import { Image } from "react-native";
+
 import { Feather } from "@expo/vector-icons";
 import { COLORS } from "../../constants/Colors";
-import { Button } from "react-native-elements";
-import { ScrollView } from "react-native";
+import VideoPlayer from "../ui/VideoPlayer";
+import { formatDuration } from "../../utilities/format";
 
-const MediaLibrary = ({ textColor }) => {
+const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
   const [photos, setPhotos] = useState([0]);
   const [albums, setAlbums] = useState([]);
-  const [album, setAlbum] = useState(null);
+  const [selectedAlbum, setSelectedAlbum] = useState("Camera");
 
   const { width } = useWindowDimensions();
 
   const getAlbumsList = async () => {
     const albums = await getAlbumsAsync();
+    //   {"assetCount": 861, "id": "-1739773001", "title": "Camera"}
 
     setAlbums(albums);
-
-  }
+  };
 
   const getPhotos = async (albumName) => {
     const { status } = await requestPermissionsAsync();
@@ -39,123 +41,154 @@ const MediaLibrary = ({ textColor }) => {
     if (status === "granted") {
       const album = await getAlbumAsync(albumName);
 
-      //   {"assetCount": 861, "id": "-1739773001", "title": "Camera"}
-      setAlbum(album);
-
-
-      // if (album) {
-      const photos = await getAssetsAsync({ first: 1000, album: album, sortBy: "creationTime", mediaType: ["photo", "video", 'audio', 'unknown'] });
+      const photos = await getAssetsAsync({
+        first: 100,
+        album: album,
+        sortBy: "creationTime",
+        mediaType: ["photo", "video", "audio", "unknown"],
+      });
       setPhotos(photos.assets);
-      // }
     }
   };
 
   useEffect(() => {
-    getAlbumsList()
-    getPhotos("Camera");
+    getAlbumsList();
+    getPhotos(selectedAlbum);
   }, []);
 
-
   return (
-    <>
-      <ScrollView style={{ height: 150 }}>
-        <Pressable onPress={() => getPhotos('')} ><Text>All</Text></Pressable>
-        {
-          albums?.length > 0 && albums.map((album, index) => <Pressable onPress={() => getPhotos(album.title)} key={index} style={{ backgroundColor: '#e3e3e3', margin: 5, padding: 10 }}><Text>{album.title}</Text></Pressable>)
-        }
-        <Text>{album?.title}</Text>
-      </ScrollView>
-      <FlatList
-        data={photos}
-        keyExtractor={(item, index) => index}
-        renderItem={({ item, index }) => {
-          if (index === 0) {
-            return (
-              <>
-                <Pressable
-                  style={({ pressed }) => [
-                    pressed && { opacity: 0.7, backgroundColor: "grey" },
-                  ]}
-                >
-                  <View
-                    style={{
-                      width: width / 3,
-                      flex: 1,
-                      padding: 1,
-                      alignItems: "center",
-                      justifyContent: "center",
-                      position: "relative",
-                    }}
+    <FlatList
+      style={{ flex: 1 }}
+      ListHeaderComponent={() => (
+        <Picker
+          selectedValue={selectedAlbum}
+          style={{ backgroundColor: backgroundColor, color: textColor }}
+          dropdownIconColor={textColor}
+          onValueChange={(itemValue) => {
+            setSelectedAlbum(itemValue);
+            getPhotos(itemValue);
+          }}
+        >
+          <Picker.Item value={""} label="All" />
+          {albums?.map((album, index) => (
+            <Picker.Item value={album.title} label={album.title} key={index} />
+          ))}
+        </Picker>
+      )}
+      ListFooterComponent={() => (
+        <FlatList
+          data={photos}
+          keyExtractor={(item, index) => index}
+          renderItem={({ item, index }) => {
+            if (index === 0) {
+              return (
+                <>
+                  <Pressable
+                    style={({ pressed }) => [
+                      { backgroundColor: COLORS.global.darkGrey800Opacity },
+                      pressed && { opacity: 0.7 },
+                    ]}
                   >
-                    <Feather name="camera" color={textColor} size={25} />
-                    <Text
+                    <View
                       style={{
-                        color: textColor,
-                        position: "absolute",
-                        bottom: 10,
-                        left: 10,
-                        fontSize: 15,
-                        fontWeight: 500,
+                        width: width / 3,
+                        flex: 1,
+                        padding: 1,
+                        alignItems: "center",
+                        justifyContent: "center",
+                        position: "relative",
                       }}
                     >
-                      Camera
-                    </Text>
-                  </View>
-                </Pressable>
+                      <Feather name="camera" color={textColor} size={25} />
+                      <Text
+                        style={{
+                          color: textColor,
+                          position: "absolute",
+                          bottom: 10,
+                          left: 10,
+                          fontSize: 15,
+                          fontWeight: 500,
+                        }}
+                      >
+                        Camera
+                      </Text>
+                    </View>
+                  </Pressable>
+                  <Pressable
+                    //   onPress={() => setSelectedPhoto(item)}
+                    style={({ pressed }) => [
+                      { padding: 1, position: "relative" },
+                      pressed && { opacity: 0.7 },
+                    ]}
+                  >
+                    <Image
+                      source={{ uri: item.uri }}
+                      style={{
+                        height: 200,
+                        width: (width - 6) / 3,
+                      }}
+                      resizeMode="cover"
+                    />
+                    {item.mediaType === "video" && (
+                      <Text
+                        style={{
+                          color: COLORS.global.white,
+                          fontSize: 10,
+                          position: "absolute",
+                          right: 5,
+                          bottom: 5,
+                          backgroundColor: COLORS.global.lightGrey500Opacity,
+                          padding: 2,
+                          borderRadius: 5,
+                        }}
+                      >
+                        {formatDuration(item.duration)}
+                      </Text>
+                    )}
+                  </Pressable>
+                </>
+              );
+            } else {
+              return (
                 <Pressable
                   //   onPress={() => setSelectedPhoto(item)}
                   style={({ pressed }) => [
-                    {
-                      padding: 1,
-                    },
+                    { padding: 1, position: "relative" },
                     pressed && { opacity: 0.7 },
                   ]}
                 >
-                  {/* <Image
-              source={{ uri: item.uri }}
-              style={{ width: 100, height: 150, margin: 5 }}
-            /> */}
                   <Image
                     source={{ uri: item.uri }}
                     style={{
-                      height: 180,
+                      height: 200,
                       width: (width - 6) / 3,
                     }}
                     resizeMode="cover"
                   />
+                  {item.mediaType === "video" && item.duration && (
+                    <Text
+                      style={{
+                        color: COLORS.global.white,
+                        fontSize: 10,
+                        position: "absolute",
+                        right: 5,
+                        bottom: 5,
+                        backgroundColor: COLORS.global.lightGrey500Opacity,
+                        padding: 2,
+                        borderRadius: 5,
+                      }}
+                    >
+                      {formatDuration(item.duration)}
+                    </Text>
+                  )}
                 </Pressable>
-              </>
-            );
-          } else {
-            return (
-              <Pressable
-                //   onPress={() => setSelectedPhoto(item)}
-                style={({ pressed }) => [
-                  {
-                    padding: 1,
-                  },
-                  pressed && { opacity: 0.7 },
-                ]}
-              >
-                {/* <Image
-              source={{ uri: item.uri }}
-              style={{ width: 100, height: 150, margin: 5 }}
-            /> */}
-                <Image
-                  source={{ uri: item.uri }}
-                  style={{
-                    height: 180,
-                    width: (width - 6) / 3,
-                  }}
-                  resizeMode="cover"
-                />
-              </Pressable>
-            );
-          }
-        }}
-        numColumns={3}
-      />
-    </>
+              );
+            }
+          }}
+          numColumns={3}
+        />
+      )}
+    />
   );
 };
 

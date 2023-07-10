@@ -130,8 +130,6 @@ const SideNavigation = ({ navigation }) => {
   );
 };
 
-
-
 const Navigation = () => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
@@ -144,8 +142,6 @@ const Navigation = () => {
           headerTintColor: textColor,
         }}
       >
-
-
         {/* home screen  */}
         <Stack.Screen
           name="SideNavigation"
@@ -169,7 +165,6 @@ const Navigation = () => {
           component={ForgotPasswordScreen}
           options={{ title: "" }}
         />
-
 
         {/* post list */}
         <Stack.Screen name="PostListScreen" component={PostListScreen} />
