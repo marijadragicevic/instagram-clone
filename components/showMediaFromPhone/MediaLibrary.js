@@ -6,6 +6,7 @@ import {
   Pressable,
   useWindowDimensions,
   Image,
+  StyleSheet,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -15,11 +16,11 @@ import {
   getAssetsAsync,
   getAlbumsAsync,
 } from "expo-media-library";
-
 import { Feather } from "@expo/vector-icons";
+
 import { COLORS } from "../../constants/Colors";
-import VideoPlayer from "../ui/VideoPlayer";
 import { formatDuration } from "../../utilities/format";
+import CheckBox from "../ui/CheckBox";
 
 const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
   const [photos, setPhotos] = useState([0]);
@@ -145,6 +146,7 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
                         {formatDuration(item.duration)}
                       </Text>
                     )}
+                    <CheckBox style={styles.checkbox} />
                   </Pressable>
                 </>
               );
@@ -181,6 +183,7 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
                       {formatDuration(item.duration)}
                     </Text>
                   )}
+                  <CheckBox style={styles.checkbox} />
                 </Pressable>
               );
             }
@@ -193,3 +196,11 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
 };
 
 export default MediaLibrary;
+
+const styles = StyleSheet.create({
+  checkbox: {
+    position: "absolute",
+    top: 5,
+    right: 5,
+  },
+});
