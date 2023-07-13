@@ -5,8 +5,6 @@ import {
   FlatList,
   Pressable,
   useWindowDimensions,
-  Image,
-  StyleSheet,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
@@ -19,8 +17,8 @@ import {
 import { Feather } from "@expo/vector-icons";
 
 import { COLORS } from "../../constants/Colors";
-import { formatDuration } from "../../utilities/format";
-import CheckBox from "../ui/CheckBox";
+
+import MediaLibraryItem from "./MediaLibraryItem";
 
 const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
   const [photos, setPhotos] = useState([0]);
@@ -115,77 +113,11 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
                       </Text>
                     </View>
                   </Pressable>
-                  <Pressable
-                    //   onPress={() => setSelectedPhoto(item)}
-                    style={({ pressed }) => [
-                      { padding: 1, position: "relative" },
-                      pressed && { opacity: 0.7 },
-                    ]}
-                  >
-                    <Image
-                      source={{ uri: item.uri }}
-                      style={{
-                        height: 200,
-                        width: (width - 6) / 3,
-                      }}
-                      resizeMode="cover"
-                    />
-                    {item.mediaType === "video" && (
-                      <Text
-                        style={{
-                          color: COLORS.global.white,
-                          fontSize: 10,
-                          position: "absolute",
-                          right: 5,
-                          bottom: 5,
-                          backgroundColor: COLORS.global.lightGrey500Opacity,
-                          padding: 2,
-                          borderRadius: 5,
-                        }}
-                      >
-                        {formatDuration(item.duration)}
-                      </Text>
-                    )}
-                    <CheckBox style={styles.checkbox} />
-                  </Pressable>
+                  <MediaLibraryItem item={item} />
                 </>
               );
             } else {
-              return (
-                <Pressable
-                  //   onPress={() => setSelectedPhoto(item)}
-                  style={({ pressed }) => [
-                    { padding: 1, position: "relative" },
-                    pressed && { opacity: 0.7 },
-                  ]}
-                >
-                  <Image
-                    source={{ uri: item.uri }}
-                    style={{
-                      height: 200,
-                      width: (width - 6) / 3,
-                    }}
-                    resizeMode="cover"
-                  />
-                  {item.mediaType === "video" && item.duration && (
-                    <Text
-                      style={{
-                        color: COLORS.global.white,
-                        fontSize: 10,
-                        position: "absolute",
-                        right: 5,
-                        bottom: 5,
-                        backgroundColor: COLORS.global.lightGrey500Opacity,
-                        padding: 2,
-                        borderRadius: 5,
-                      }}
-                    >
-                      {formatDuration(item.duration)}
-                    </Text>
-                  )}
-                  <CheckBox style={styles.checkbox} />
-                </Pressable>
-              );
+              return <MediaLibraryItem item={item} />;
             }
           }}
           numColumns={3}
@@ -196,11 +128,3 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
 };
 
 export default MediaLibrary;
-
-const styles = StyleSheet.create({
-  checkbox: {
-    position: "absolute",
-    top: 5,
-    right: 5,
-  },
-});
