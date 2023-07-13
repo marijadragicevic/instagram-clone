@@ -20,7 +20,7 @@ import { COLORS } from "../../constants/Colors";
 
 import MediaLibraryItem from "./MediaLibraryItem";
 
-const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
+const MediaLibrary = ({ textColor = COLORS.global.white }) => {
   const [photos, setPhotos] = useState([0]);
   const [albums, setAlbums] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState("Camera");
@@ -46,6 +46,7 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
         sortBy: "creationTime",
         mediaType: ["photo", "video", "audio", "unknown"],
       });
+
       setPhotos(photos.assets);
     }
   };
@@ -61,7 +62,7 @@ const MediaLibrary = ({ textColor = COLORS.global.white, backgroundColor }) => {
       ListHeaderComponent={() => (
         <Picker
           selectedValue={selectedAlbum}
-          style={{ backgroundColor: backgroundColor, color: textColor }}
+          style={{ color: textColor }}
           dropdownIconColor={textColor}
           onValueChange={(itemValue) => {
             setSelectedAlbum(itemValue);

@@ -4,6 +4,7 @@ import {
   FontAwesome,
   Entypo,
   MaterialIcons,
+  MaterialCommunityIcons,
 } from "@expo/vector-icons";
 import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -41,6 +42,8 @@ const IconButton = ({
         <Entypo name={icon} size={size} color={currentColor} />
       ) : icon?.includes("location") || icon?.includes("person-add") ? (
         <MaterialIcons name={icon} size={size} color={currentColor} />
+      ) : icon?.includes("checkbox-multiple") ? (
+        <MaterialCommunityIcons name={icon} size={size} color={currentColor} />
       ) : (
         <Feather name={icon} size={size} color={currentColor} />
       )}

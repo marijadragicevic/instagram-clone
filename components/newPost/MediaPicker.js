@@ -5,9 +5,16 @@ import {
   useLayoutEffect,
   useState,
 } from "react";
-import { View, StyleSheet, Alert, Dimensions } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Alert,
+  useWindowDimensions,
+  FlatList,
+} from "react-native";
 
 import { useIsFocused, useNavigation } from "@react-navigation/native";
+import { Picker } from "@react-native-picker/picker";
 
 import {
   useCameraPermissions,
@@ -16,8 +23,13 @@ import {
   PermissionStatus,
   MediaTypeOptions,
 } from "expo-image-picker";
+import {
+  requestPermissionsAsync,
+  getAlbumAsync,
+  getAssetsAsync,
+  getAlbumsAsync,
+} from "expo-media-library";
 
-import OutlineButton from "../ui/OutlineButton";
 import IconButton from "../ui/IconButton";
 import MediaList from "../ui/MediaList";
 
@@ -25,11 +37,16 @@ import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
 import ScrollDots from "../ui/ScrollDots";
 import { COLORS } from "../../constants/Colors";
+import MediaLibraryItem from "../showMediaFromPhone/MediaLibraryItem";
 
 const MediaPicker = () => {
   const [pickedMediaList, setPickedMediaList] = useState([]);
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [multipleSelection, setMultipleSelection] = useState(false);
+
+  const [photos, setPhotos] = useState([0]);
+  const [albums, setAlbums] = useState([]);
+  const [selectedAlbum, setSelectedAlbum] = useState("Camera");
 
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
@@ -40,7 +57,7 @@ const MediaPicker = () => {
   const [cameraPermissionInfo, requestCameraPermission] =
     useCameraPermissions();
 
-  const { width, height } = Dimensions.get("window");
+  const { width, height } = useWindowDimensions();
 
   const handleMediaSubmit = useCallback(() => {
     // add media to server/context so that we can use it in other screens
@@ -127,6 +144,35 @@ const MediaPicker = () => {
     [setFocusedIndex]
   );
 
+  const getAlbumsList = async () => {
+    const albums = await getAlbumsAsync();
+    //   {"assetCount": 861, "id": "-1739773001", "title": "Camera"}
+
+    setAlbums(albums);
+  };
+
+  const getPhotos = async (albumName) => {
+    const { status } = await requestPermissionsAsync();
+
+    if (status === "granted") {
+      const album = await getAlbumAsync(albumName);
+
+      const photos = await getAssetsAsync({
+        first: 100,
+        album: album,
+        sortBy: "creationTime",
+        mediaType: ["photo", "video", "audio", "unknown"],
+      });
+
+      setPhotos(photos.assets);
+    }
+  };
+
+  useEffect(() => {
+    getAlbumsList();
+    getPhotos(selectedAlbum);
+  }, [selectedAlbum]);
+
   useEffect(() => {
     return () => {
       setMultipleSelection(false);
@@ -159,40 +205,99 @@ const MediaPicker = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.mediaListContainer}>
-        <MediaList
-          pickedMediaList={pickedMediaList}
-          onScroll={handleScroll}
-          focusedIndex={focusedIndex}
-        />
-      </View>
-      <ScrollDots
-        number={pickedMediaList?.length}
-        focusedIndex={focusedIndex}
-      />
-      <View style={[styles.buttonContainer]}>
-        <OutlineButton onPress={pickMediaHandler.bind(this, multipleSelection)}>
-          Gallery
-        </OutlineButton>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 5 }}>
-          <IconButton
-            icon={multipleSelection ? "check-square" : "square"}
-            color={COLORS.global.white}
-            style={[styles.iconContainer, multipleSelection && styles.enabled]}
-            styleText={styles.selectionText}
-            onPress={multipleSelectionHandler}
-          >
-            MULTIPLE SELECTION
-          </IconButton>
-          <IconButton
-            icon="camera"
-            color={COLORS.global.white}
-            style={styles.iconContainer}
-            onPress={takeImageHandler}
-            disabled={multipleSelection}
+      <FlatList
+        ListHeaderComponent={() => (
+          <>
+            <View style={styles.mediaListContainer}>
+              <MediaList
+                pickedMediaList={pickedMediaList}
+                onScroll={handleScroll}
+                focusedIndex={focusedIndex}
+              />
+            </View>
+            <ScrollDots
+              number={pickedMediaList?.length}
+              focusedIndex={focusedIndex}
+            />
+            <View
+              style={[
+                styles.buttonContainer,
+                { backgroundColor: backgroundColor },
+              ]}
+            >
+              {/* <OutlineButton onPress={pickMediaHandler.bind(this, multipleSelection)}>
+        Gallery
+      </OutlineButton> */}
+              <Picker
+                selectedValue={selectedAlbum}
+                style={{ color: textColor, width: 200 }}
+                dropdownIconColor={textColor}
+                onValueChange={(itemValue) => {
+                  setSelectedAlbum(itemValue);
+                  getPhotos(itemValue);
+                }}
+              >
+                <Picker.Item value={""} label="All" />
+                {albums?.map((album, index) => (
+                  <Picker.Item
+                    value={album.title}
+                    label={album.title}
+                    key={index}
+                  />
+                ))}
+              </Picker>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  gap: 5,
+                  marginRight: 5,
+                }}
+              >
+                <IconButton
+                  icon={
+                    multipleSelection
+                      ? "checkbox-multiple-marked"
+                      : "checkbox-multiple-blank-outline"
+                  }
+                  color={COLORS.global.white}
+                  size={20}
+                  style={[
+                    styles.iconContainer,
+                    multipleSelection && styles.enabled,
+                  ]}
+                  styleText={styles.selectionText}
+                  onPress={multipleSelectionHandler}
+                />
+                <IconButton
+                  icon="camera"
+                  color={COLORS.global.white}
+                  size={20}
+                  style={styles.iconContainer}
+                  onPress={takeImageHandler}
+                  disabled={multipleSelection}
+                />
+              </View>
+            </View>
+          </>
+        )}
+        ListFooterComponent={() => (
+          <FlatList
+            data={photos}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item, index }) => (
+              <MediaLibraryItem
+                item={item}
+                multipleSelection={multipleSelection}
+                imageStyle={{ height: (width - 8) / 4 }}
+                numberOfColumns={4}
+              />
+            )}
+            numColumns={4}
+            style={{ backgroundColor: backgroundColor }}
           />
-        </View>
-      </View>
+        )}
+      />
     </View>
   );
 };
@@ -229,11 +334,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingHorizontal: 10,
-    paddingVertical: 20,
   },
   iconContainer: {
-    backgroundColor: COLORS.global.lightGrey200Opacity,
+    backgroundColor: COLORS.global.lightGrey500,
     padding: 8,
     borderRadius: 50,
     position: "relative",
@@ -243,6 +346,7 @@ const styles = StyleSheet.create({
   },
   selectionText: {
     marginLeft: 5,
+    fontSize: 12,
   },
   notificationContainer: {
     alignItems: "center",

@@ -1,21 +1,21 @@
 import { useState } from "react";
-import { View, StyleSheet, Pressable } from "react-native";
+import { View, StyleSheet, Pressable, Text } from "react-native";
 
 import { COLORS } from "../../constants/Colors";
-import { Text } from "react-native";
 
-const CheckBox = ({ style, number, isSelected }) => {
+const CheckBox = ({ style, number, isSelected, type = "checkbox" }) => {
   const [isChecked, setIsChecked] = useState(false);
+
   const paddingHorizontal =
     number > 0 && number < 10
-      ? { paddingHorizontal: 10 }
+      ? { paddingHorizontal: 8 }
       : number === 10
-      ? { paddingHorizontal: 6 }
-      : { paddingHorizontal: 15 };
+      ? { paddingHorizontal: 5 }
+      : { paddingHorizontal: 11 };
 
   return (
     <View style={[styles.outerContainer, style]}>
-      {isSelected ? (
+      {type === "selected" ? (
         <View
           style={[
             styles.container,
@@ -23,7 +23,7 @@ const CheckBox = ({ style, number, isSelected }) => {
             paddingHorizontal,
           ]}
         >
-          <Text style={styles.text}>{isChecked && number}</Text>
+          <Text style={styles.text}>{isSelected && number}</Text>
         </View>
       ) : (
         <Pressable
@@ -53,11 +53,12 @@ const styles = StyleSheet.create({
     borderColor: COLORS.global.lightGrey150,
     borderWidth: 1,
     borderRadius: 50,
-    paddingVertical: 5,
+    paddingVertical: 3,
   },
   text: {
     color: COLORS.global.white,
     textAlign: "center",
+    fontSize: 12,
   },
   checked: {
     backgroundColor: COLORS.global.lightBlue600,
