@@ -6,7 +6,7 @@ import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
 import Button from "../ui/Button";
 
-const AddComment = () => {
+const AddComment = ({ isInputInFocus }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
@@ -19,7 +19,7 @@ const AddComment = () => {
     setComment({ value: eneredText, error: "" });
   };
 
-  const handleSubmit = () => { };
+  const handleSubmit = () => {};
 
   return (
     <View
@@ -66,6 +66,7 @@ const AddComment = () => {
         onChangeText={handleChange}
         style={[styles.input, { color: textColor }]}
         multiline={true}
+        autoFocus={isInputInFocus}
       />
       <Button
         styleText={styles.btnText}

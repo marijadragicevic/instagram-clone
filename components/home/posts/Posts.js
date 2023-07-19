@@ -1,10 +1,10 @@
-import { View, Text, FlatList } from "react-native";
+import { FlatList } from "react-native";
 
 import Post from "./Post";
 import { POSTS } from "../../../data/posts";
 import { getThemeColors } from "../../../utilities/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
-import { useContext, useLayoutEffect, useRef } from "react";
+import { useContext, useRef } from "react";
 
 const Posts = ({ marginVertical = 10, currentIndex }) => {
   const { theme } = useContext(ThemeContext);

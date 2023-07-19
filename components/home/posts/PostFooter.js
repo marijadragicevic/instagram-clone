@@ -81,7 +81,7 @@ const PostFooter = ({ post, index }) => {
 
   return (
     <View style={styles.container}>
-      <PostIconsFooter />
+      <PostIconsFooter post={post} index={index} />
       <Likes post={post} />
       <Caption user={post.user} content={post.caption} />
       {isCommentVisible && <CommentsSection post={post} index={index} />}

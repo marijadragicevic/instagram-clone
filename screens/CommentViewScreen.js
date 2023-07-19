@@ -12,6 +12,7 @@ const CommentViewScreen = ({ route }) => {
 
   const post = route.params.data;
   const commentList = post?.comments;
+  const isInputInFocus = route?.params?.focus || false;
 
   // <View style={[styles.container, { backgroundColor: backgroundColor }]}>
   //   <CommentSection post={post} />
@@ -35,7 +36,7 @@ const CommentViewScreen = ({ route }) => {
           />
         )}
       />
-      <AddComment />
+      <AddComment isInputInFocus={isInputInFocus} />
     </View>
   );
 };
