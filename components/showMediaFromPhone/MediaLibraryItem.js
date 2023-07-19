@@ -29,7 +29,9 @@ const MediaLibraryItem = ({
     <Pressable
       onPress={() => {
         // ?
-        // onSelect(item);
+        if (onSelect) {
+          onSelect(item);
+        }
         setIsSelected(!isSelected);
       }}
       style={({ pressed }) => [

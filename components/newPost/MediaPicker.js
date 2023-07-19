@@ -92,24 +92,37 @@ const MediaPicker = () => {
     return true;
   };
 
-  const pickMediaHandler = async (multipleSelection) => {
-    // when multiple is true allowsEditing is always false
-    const response = await launchImageLibraryAsync({
-      mediaTypes: MediaTypeOptions.All,
-      //   allowsEditing: true,
-      aspect: [3, 4],
-      quality: 0.7,
-      allowsMultipleSelection: multipleSelection,
-    });
+  // old function
+  // const pickMediaHandler = async (multipleSelection) => {
+  //   // when multiple is true allowsEditing is always false
+  //   const response = await launchImageLibraryAsync({
+  //     mediaTypes: MediaTypeOptions.All,
+  //     //   allowsEditing: true,
+  //     aspect: [3, 4],
+  //     quality: 0.7,
+  //     allowsMultipleSelection: multipleSelection,
+  //   });
 
-    if (!response.canceled) {
-      const mediaUriList =
-        response?.assets?.length > 0 &&
-        response?.assets?.map((asset) => ({
-          uri: asset?.uri,
-          type: asset.type,
-        }));
-      setPickedMediaList(mediaUriList);
+  //   if (!response.canceled) {
+  //     const mediaUriList =
+  //       response?.assets?.length > 0 &&
+  //       response?.assets?.map((asset) => ({
+  //         uri: asset?.uri,
+  //         type: asset.type,
+  //       }));
+  //     setPickedMediaList(mediaUriList);
+  //   }
+  // };
+
+  const pickMediaHandler = async (media) => {
+    if (media) {
+      setPickedMediaList([
+        ...pickedMediaList,
+        {
+          ...media,
+          type: media.mediaType,
+        },
+      ]);
     }
   };
 
@@ -225,9 +238,6 @@ const MediaPicker = () => {
                 { backgroundColor: backgroundColor },
               ]}
             >
-              {/* <OutlineButton onPress={pickMediaHandler.bind(this, multipleSelection)}>
-        Gallery
-      </OutlineButton> */}
               <Picker
                 selectedValue={selectedAlbum}
                 style={{ color: textColor, width: 200 }}
@@ -291,6 +301,7 @@ const MediaPicker = () => {
                 multipleSelection={multipleSelection}
                 imageStyle={{ height: (width - 8) / 4 }}
                 numberOfColumns={4}
+                onSelect={pickMediaHandler}
               />
             )}
             numColumns={4}
