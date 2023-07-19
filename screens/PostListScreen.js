@@ -1,5 +1,4 @@
-import { View, Text } from "react-native";
-import React, { useLayoutEffect } from "react";
+import { useLayoutEffect } from "react";
 import Posts from "../components/home/posts/Posts";
 
 const PostListScreen = ({ route, navigation }) => {

@@ -14,6 +14,8 @@ import { getThemeColors } from "../utilities/theme";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
+import { COLORS } from "../constants/Colors";
+
 import HomeScreen from "../screens/HomeScreen";
 import NewPostScreen from "../screens/AddPostScreens/NewPostScreen";
 import MessagesScreen from "../screens/MessagesScreen";
@@ -28,7 +30,6 @@ import LoginScreen from "../screens/LoginScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import ForgotPasswordScreen from "../screens/ForgotPasswordScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import { COLORS } from "../constants/Colors";
 import PostListScreen from "../screens/PostListScreen";
 import CommentViewScreen from "../screens/CommentViewScreen";
 import AddStoryScreen from "../screens/AddStoryScreen";
