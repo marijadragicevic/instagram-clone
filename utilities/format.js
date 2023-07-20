@@ -16,3 +16,12 @@ export const formatDuration = (time) => {
 
   return minutes + " : " + seconds;
 };
+
+export const formatText = (text) => {
+  const result =
+    text?.length > 11
+      ? text?.slice(0, 10).toLowerCase() + "..."
+      : text.toLowerCase();
+
+  return result;
+};

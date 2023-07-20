@@ -4,10 +4,13 @@ import { getThemeColors } from "../../../utilities/theme";
 import { useContext } from "react";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { COLORS } from "../../../constants/Colors";
+import { formatText } from "../../../utilities/format";
 
 const Story = ({ user, image, imageStyle, disableGradient }) => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const formatedUserText = formatText(user);
 
   return (
     <View style={styles.container}>
@@ -47,9 +50,7 @@ const Story = ({ user, image, imageStyle, disableGradient }) => {
       )}
       {user && (
         <Text style={{ color: textColor, fontSize: 12 }}>
-          {user?.length > 11
-            ? user?.slice(0, 10).toLowerCase() + "..."
-            : user.toLowerCase()}
+          {formatedUserText}
         </Text>
       )}
     </View>

@@ -20,11 +20,6 @@ const Profile = () => {
     navigation.setOptions({ title: currentUser });
   }, [navigation, theme]);
 
-  // <FlatList
-  //   style={[styles.container, { backgroundColor: backgroundColor }]}
-  //   ListHeaderComponent={ProfileHeader}
-  //   ListFooterComponent={ProfileGallery}
-  // />
   return (
     <View style={[styles.container, { backgroundColor: backgroundColor }]}>
       <ProfileHeader user={currentUser} />

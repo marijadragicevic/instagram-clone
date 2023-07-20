@@ -39,7 +39,7 @@ const ProfileGallery = () => {
           labelStyle={{ color: textColor }}
         />
       )}
-      style={{ marginTop: 20 }}
+      style={{ marginTop: 10 }}
     />
   );
 };

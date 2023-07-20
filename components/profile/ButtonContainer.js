@@ -1,8 +1,9 @@
+import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 
 import Button from "../ui/Button";
 import IconButton from "../ui/IconButton";
-import { useEffect, useState } from "react";
+import UsersList from "./UsersList";
 import { COLORS } from "../../constants/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { loggedInUser } from "../../screens/MessagesScreen";
@@ -23,91 +24,95 @@ const ButtonContainer = ({ textColor, isLightTheme, user }) => {
   }, [user]);
 
   return (
-    <View style={styles.container}>
-      {!isLoggedInUser ? (
-        <>
-          <Button
-            style={[
-              styles.button,
-              !isLoggedInUser && !isFollowing
-                ? {
-                    backgroundColor: COLORS.global.lightBlue400,
-                  }
-                : {
-                    backgroundColor: isLightTheme
-                      ? COLORS.global.lightGrey100
-                      : COLORS.global.darkGrey700Opacity,
-                  },
-            ]}
-            styleText={[
-              styles.text,
-              !isLoggedInUser && !isFollowing && { color: COLORS.global.white },
-            ]}
-            onPress={() => {
-              setIsFollowing(!isFollowing);
-            }}
-          >
-            {isFollowing ? "Following" : "Follow"}
-          </Button>
-          <Button
-            style={[
-              styles.button,
-              {
-                backgroundColor: isLightTheme
-                  ? COLORS.global.lightGrey100
-                  : COLORS.global.darkGrey700Opacity,
-              },
-            ]}
-            styleText={[styles.text]}
-            onPress={() => navigation.navigate("MessageChat", { user: user })}
-          >
-            Message
-          </Button>
-        </>
-      ) : (
-        <>
-          <Button
-            style={[
-              styles.button,
-              {
-                backgroundColor: isLightTheme
-                  ? COLORS.global.lightGrey100
-                  : COLORS.global.darkGrey700Opacity,
-              },
-            ]}
-            styleText={styles.text}
-          >
-            Edit profile
-          </Button>
-          <Button
-            style={[
-              styles.button,
-              {
-                backgroundColor: isLightTheme
-                  ? COLORS.global.lightGrey100
-                  : COLORS.global.darkGrey700Opacity,
-              },
-            ]}
-            styleText={styles.text}
-          >
-            Share profile
-          </Button>
-        </>
-      )}
-      <IconButton
-        style={[
-          styles.iconButton,
-          {
-            backgroundColor: isLightTheme
-              ? COLORS.global.lightGrey100
-              : COLORS.global.darkGrey700Opacity,
-          },
-        ]}
-        icon={isActive ? "person-add-alt-1" : "person-add-alt"}
-        size={20}
-        onPress={() => setIsActive(!isActive)}
-      />
-    </View>
+    <>
+      <View style={styles.container}>
+        {!isLoggedInUser ? (
+          <>
+            <Button
+              style={[
+                styles.button,
+                !isLoggedInUser && !isFollowing
+                  ? {
+                      backgroundColor: COLORS.global.lightBlue400,
+                    }
+                  : {
+                      backgroundColor: isLightTheme
+                        ? COLORS.global.lightGrey100
+                        : COLORS.global.darkGrey700Opacity,
+                    },
+              ]}
+              styleText={[
+                styles.text,
+                !isLoggedInUser &&
+                  !isFollowing && { color: COLORS.global.white },
+              ]}
+              onPress={() => {
+                setIsFollowing(!isFollowing);
+              }}
+            >
+              {isFollowing ? "Following" : "Follow"}
+            </Button>
+            <Button
+              style={[
+                styles.button,
+                {
+                  backgroundColor: isLightTheme
+                    ? COLORS.global.lightGrey100
+                    : COLORS.global.darkGrey700Opacity,
+                },
+              ]}
+              styleText={[styles.text]}
+              onPress={() => navigation.navigate("MessageChat", { user: user })}
+            >
+              Message
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button
+              style={[
+                styles.button,
+                {
+                  backgroundColor: isLightTheme
+                    ? COLORS.global.lightGrey100
+                    : COLORS.global.darkGrey700Opacity,
+                },
+              ]}
+              styleText={styles.text}
+            >
+              Edit profile
+            </Button>
+            <Button
+              style={[
+                styles.button,
+                {
+                  backgroundColor: isLightTheme
+                    ? COLORS.global.lightGrey100
+                    : COLORS.global.darkGrey700Opacity,
+                },
+              ]}
+              styleText={styles.text}
+            >
+              Share profile
+            </Button>
+          </>
+        )}
+        <IconButton
+          style={[
+            styles.iconButton,
+            {
+              backgroundColor: isLightTheme
+                ? COLORS.global.lightGrey100
+                : COLORS.global.darkGrey700Opacity,
+            },
+          ]}
+          icon={isActive ? "person-add-alt-1" : "person-add-alt"}
+          size={20}
+          onPress={() => setIsActive(!isActive)}
+        />
+      </View>
+      {isActive && <UsersList />}
+    </>
   );
 };
 
