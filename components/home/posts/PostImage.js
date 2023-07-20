@@ -18,21 +18,25 @@ const PostImage = ({ post }) => {
     const currentTime = new Date().getTime();
     const delay = 300;
 
-    if (currentTime - lastPress < delay) {
+    if (currentTime - lastPress < delay && !isLikeVisible) {
       // double press happened
       setIsLikeVisible(true);
 
-      Animated.timing(scaleValue, {
-        toValue: 3, // Scale to 3 times the original size
-        duration: 300, // Animation duration in milliseconds
-        useNativeDriver: true, // Enable native driver for better performance
-      }).start(() => {
-        // Animation completed
-        // Add any additional logic after the animation here
-        setTimeout(() => {
-          setIsLikeVisible(false);
-          scaleValue.setValue(1);
-        }, 300);
+      Animated.sequence([
+        Animated.timing(scaleValue, {
+          toValue: 3,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleValue, {
+          toValue: 0.2,
+          duration: 300,
+          useNativeDriver: true,
+          delay: 200,
+        }),
+      ]).start(() => {
+        setIsLikeVisible(false);
+        // scaleValue.setValue(1)
       });
     }
 
