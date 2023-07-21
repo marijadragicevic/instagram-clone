@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import React, { useContext, useLayoutEffect } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ThemeContext } from "../../context/ThemeContext";

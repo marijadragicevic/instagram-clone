@@ -1,6 +1,4 @@
-import { View, Text, Image, ScrollView, Pressable } from "react-native";
 import React from "react";
-import { POSTS } from "../../data/posts";
 import Gallery from "../ui/Gallery";
 import { useNavigation } from "@react-navigation/native";
 

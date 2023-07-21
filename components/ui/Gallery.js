@@ -15,6 +15,7 @@ const Gallery = ({ list, onPress }) => {
         paddingTop: 2,
       }}
       numColumns={3}
+      nestedScrollEnabled
       renderItem={({ itemData, index }) => (
         <Pressable
           style={({ pressed }) => [
