@@ -1,15 +1,23 @@
 import { View, StyleSheet } from "react-native";
 
 import IconButton from "../../ui/IconButton";
+
 import { useNavigation } from "@react-navigation/native";
 
-const PostIconsFooter = ({ post, index }) => {
+import { COLORS } from "../../../constants/Colors";
+
+const PostIconsFooter = ({ post, index, isLiked, handleLikePost }) => {
   const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
       <View style={styles.groupIcons}>
-        <IconButton icon="heart-o" size={25} />
+        <IconButton
+          icon={isLiked ? "heart" : "heart-o"}
+          size={25}
+          color={isLiked ? COLORS.global.lightRed600 : null}
+          onPress={handleLikePost}
+        />
         <IconButton
           icon="message-circle"
           size={25}

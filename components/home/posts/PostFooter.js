@@ -76,12 +76,17 @@ const CommentsSection = ({ post, index }) => {
   );
 };
 
-const PostFooter = ({ post, index }) => {
+const PostFooter = ({ post, index, isLiked, handleLikePost }) => {
   const isCommentVisible = post?.comments?.length > 0;
 
   return (
     <View style={styles.container}>
-      <PostIconsFooter post={post} index={index} />
+      <PostIconsFooter
+        post={post}
+        index={index}
+        isLiked={isLiked}
+        handleLikePost={handleLikePost}
+      />
       <Likes post={post} />
       <Caption user={post.user} content={post.caption} />
       {isCommentVisible && <CommentsSection post={post} index={index} />}
