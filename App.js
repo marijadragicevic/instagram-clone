@@ -1,10 +1,13 @@
+import { useContext } from "react";
+import { StyleSheet } from "react-native";
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet } from 'react-native'
+
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 import ThemeContextProvider, { ThemeContext } from "./context/ThemeContext";
 
 import Navigation from "./navigation/Navigation";
-import { useContext } from "react";
 
 // !!! add onPress on all buttons
 
@@ -23,18 +26,19 @@ const HelperComponent = () => {
 
 export default function App() {
   return (
-    <ThemeContextProvider>
-      <HelperComponent />
-    </ThemeContextProvider>
-
+    <Provider store={store}>
+      <ThemeContextProvider>
+        <HelperComponent />
+      </ThemeContextProvider>
+    </Provider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
