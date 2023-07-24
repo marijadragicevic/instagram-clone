@@ -1,4 +1,9 @@
-import React, { useState, useContext, useLayoutEffect } from "react";
+import React, {
+  useEffect,
+  useContext,
+  useLayoutEffect,
+  useCallback,
+} from "react";
 import { View, Alert } from "react-native";
 
 import MediaLibrary from "../components/showMediaFromPhone/MediaLibrary";
@@ -7,35 +12,100 @@ import IconButton from "../components/ui/IconButton";
 import { getThemeColors } from "../utilities/theme";
 import { ThemeContext } from "../context/ThemeContext";
 import { COLORS } from "../constants/Colors";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  albumsList,
+  getAlbumsList,
+  getDevicesMedia,
+  mediaList,
+  selectedMediaList,
+  setMediaList,
+  setSelectedMediaList,
+} from "../redux/slices/DevicesMedia";
+
+import { useIsFocused } from "@react-navigation/native";
 
 const AddStoryScreen = ({ navigation }) => {
+  const isFocused = useIsFocused();
+
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
-  const [selectedPhotos, setSelectedPhotos] = useState([]);
+  const dispatch = useDispatch();
 
-  // ?
-  const addSelectedPhotos = (photo) => {
-    if (selectedPhotos?.length === 10) {
-      Alert.alert("", "The limit is 10 photos or videos", [], {
-        cancelable: true,
-      });
-      return;
-    }
+  const selectedMedia = useSelector(selectedMediaList);
+  const photos = useSelector(mediaList);
+  const albums = useSelector(albumsList);
 
-    const isDuplicate =
-      selectedPhotos?.length > 0 &&
-      selectedPhotos?.find((selectedPhoto) => selectedPhoto.id === photo.id);
-
-    if (isDuplicate) {
-      const updateSelectedPhotos = selectedPhotos?.filter(
-        (selectedPhoto) => selectedPhoto.id !== photo.id
+  const addSelectedMedia = useCallback(
+    (selectedPhoto) => {
+      const duplicate = selectedMedia?.find(
+        (selectedMediaItem) => selectedPhoto.id === selectedMediaItem.id
       );
-      setSelectedPhotos(updateSelectedPhotos);
-    } else {
-      setSelectedPhotos([...selectedPhotos, photo]);
+
+      if (selectedMedia?.length === 10 && !duplicate) {
+        Alert.alert("", "The limit is 10 photos or videos", [], {
+          cancelable: true,
+        });
+        return;
+      }
+
+      const updatePhotos = photos?.map((photo) => {
+        if (selectedPhoto.id === photo.id) {
+          return {
+            ...selectedPhoto,
+            isSelected: !selectedPhoto?.isSelected,
+          };
+        }
+
+        return photo;
+      });
+
+      let updateSelectedMedia = [];
+
+      if (selectedMedia?.length === 0) {
+        updateSelectedMedia = [
+          ...selectedMedia,
+          { ...selectedPhoto, isSelected: true, number: 1 },
+        ];
+      } else if (selectedMedia?.length > 0) {
+        updateSelectedMedia = duplicate
+          ? selectedMedia
+              ?.filter(
+                (selectedMediaItem) => selectedMediaItem?.id !== duplicate?.id
+              )
+              ?.map((filteredMedia, index) => ({
+                ...filteredMedia,
+                number: index + 1,
+              }))
+          : [
+              ...selectedMedia,
+              {
+                ...selectedPhoto,
+                isSelected: true,
+                number: selectedMedia?.length + 1,
+              },
+            ];
+      }
+
+      dispatch(setMediaList(updatePhotos));
+      dispatch(setSelectedMediaList(updateSelectedMedia));
+    },
+    [selectedMedia, photos]
+  );
+
+  useEffect(() => {
+    if (isFocused) {
+      dispatch(getAlbumsList());
+      dispatch(getDevicesMedia("Camera"));
     }
-  };
+
+    return () => {
+      dispatch(setSelectedMediaList([]));
+      dispatch(getAlbumsList());
+      dispatch(getDevicesMedia("Camera"));
+    };
+  }, [isFocused]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -66,7 +136,11 @@ const AddStoryScreen = ({ navigation }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: COLORS.global.black }}>
-      <MediaLibrary />
+      <MediaLibrary
+        onSelect={addSelectedMedia}
+        photos={photos}
+        albums={albums}
+      />
     </View>
   );
 };

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -8,53 +8,26 @@ import {
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 
-import {
-  requestPermissionsAsync,
-  getAlbumAsync,
-  getAssetsAsync,
-  getAlbumsAsync,
-} from "expo-media-library";
 import { Feather } from "@expo/vector-icons";
 
 import { COLORS } from "../../constants/Colors";
 
 import MediaLibraryItem from "./MediaLibraryItem";
 
-const MediaLibrary = ({ textColor = COLORS.global.white }) => {
-  const [photos, setPhotos] = useState([0]);
-  const [albums, setAlbums] = useState([]);
+import { useDispatch } from "react-redux";
+import { getDevicesMedia } from "../../redux/slices/DevicesMedia";
+
+const MediaLibrary = ({
+  textColor = COLORS.global.white,
+  onSelect,
+  albums,
+  photos,
+}) => {
   const [selectedAlbum, setSelectedAlbum] = useState("Camera");
 
+  const dispatch = useDispatch();
+
   const { width } = useWindowDimensions();
-
-  const getAlbumsList = async () => {
-    const albums = await getAlbumsAsync();
-    //   {"assetCount": 861, "id": "-1739773001", "title": "Camera"}
-
-    setAlbums(albums);
-  };
-
-  const getPhotos = async (albumName) => {
-    const { status } = await requestPermissionsAsync();
-
-    if (status === "granted") {
-      const album = await getAlbumAsync(albumName);
-
-      const photos = await getAssetsAsync({
-        first: 100,
-        album: album,
-        sortBy: "creationTime",
-        mediaType: ["photo", "video", "audio", "unknown"],
-      });
-
-      setPhotos(photos.assets);
-    }
-  };
-
-  useEffect(() => {
-    getAlbumsList();
-    getPhotos(selectedAlbum);
-  }, []);
 
   return (
     <FlatList
@@ -66,7 +39,7 @@ const MediaLibrary = ({ textColor = COLORS.global.white }) => {
           dropdownIconColor={textColor}
           onValueChange={(itemValue) => {
             setSelectedAlbum(itemValue);
-            getPhotos(itemValue);
+            dispatch(getDevicesMedia(itemValue));
           }}
         >
           <Picker.Item value={""} label="All" />
@@ -114,11 +87,11 @@ const MediaLibrary = ({ textColor = COLORS.global.white }) => {
                       </Text>
                     </View>
                   </Pressable>
-                  <MediaLibraryItem item={item} />
+                  <MediaLibraryItem item={item} onSelect={onSelect} />
                 </>
               );
             } else {
-              return <MediaLibraryItem item={item} />;
+              return <MediaLibraryItem item={item} onSelect={onSelect} />;
             }
           }}
           numColumns={3}

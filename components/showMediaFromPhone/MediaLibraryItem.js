@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -12,6 +11,8 @@ import { COLORS } from "../../constants/Colors";
 import CheckBox from "../ui/CheckBox";
 
 import { formatDuration } from "../../utilities/format";
+import { useSelector } from "react-redux";
+import { selectedMediaList } from "../../redux/slices/DevicesMedia";
 
 const MediaLibraryItem = ({
   item,
@@ -21,18 +22,22 @@ const MediaLibraryItem = ({
   imageStyle,
   numberOfColumns = 3,
 }) => {
-  const [isSelected, setIsSelected] = useState(false);
+  const selectedMedia = useSelector(selectedMediaList);
 
   const { width } = useWindowDimensions();
 
+  const number = selectedMedia?.find(
+    (selectedMediaItem) => selectedMediaItem.id === item.id
+  )?.number;
+
   return (
     <Pressable
-      onPress={() => {
+      onPress={(event) => {
+        event.preventDefault();
         // ?
         if (onSelect) {
           onSelect(item);
         }
-        setIsSelected(!isSelected);
       }}
       style={({ pressed }) => [
         { padding: 1, position: "relative" },
@@ -67,12 +72,13 @@ const MediaLibraryItem = ({
           {formatDuration(item.duration)}
         </Text>
       )}
-      {isSelected && <View style={[styles.overlay, imageStyle]}></View>}
+      {item?.isSelected && <View style={[styles.overlay, imageStyle]}></View>}
       {multipleSelection && (
         <CheckBox
           style={styles.checkbox}
-          isSelected={isSelected}
+          isSelected={item?.isSelected}
           type="selected"
+          number={number}
         />
       )}
     </Pressable>

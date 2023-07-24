@@ -3,7 +3,7 @@ import { View, StyleSheet, Pressable, Text } from "react-native";
 
 import { COLORS } from "../../constants/Colors";
 
-const CheckBox = ({ style, number, isSelected, type = "checkbox" }) => {
+const CheckBox = ({ style, number = 0, isSelected, type = "checkbox" }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const paddingHorizontal =
