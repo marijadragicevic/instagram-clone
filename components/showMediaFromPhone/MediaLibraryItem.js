@@ -18,7 +18,7 @@ const MediaLibraryItem = ({
   item,
   onSelect,
   style,
-  multipleSelection = true,
+  multipleSelection = false,
   imageStyle,
   numberOfColumns = 3,
 }) => {
@@ -36,7 +36,7 @@ const MediaLibraryItem = ({
         event.preventDefault();
         // ?
         if (onSelect) {
-          onSelect(item);
+          onSelect(item, multipleSelection);
         }
       }}
       style={({ pressed }) => [

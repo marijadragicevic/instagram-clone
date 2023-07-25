@@ -47,6 +47,7 @@ export const getDevicesMedia = (albumName = "") => {
           ...mediaItem,
           isSelected: false,
           number: null,
+          type: mediaItem.mediaType,
         }));
         dispatch(setMediaList(updateMedia));
       }

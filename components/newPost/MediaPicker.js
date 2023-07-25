@@ -23,29 +23,32 @@ import {
   PermissionStatus,
   MediaTypeOptions,
 } from "expo-image-picker";
-import {
-  requestPermissionsAsync,
-  getAlbumAsync,
-  getAssetsAsync,
-  getAlbumsAsync,
-} from "expo-media-library";
 
 import IconButton from "../ui/IconButton";
 import MediaList from "../ui/MediaList";
-
-import { getThemeColors } from "../../utilities/theme";
-import { ThemeContext } from "../../context/ThemeContext";
 import ScrollDots from "../ui/ScrollDots";
-import { COLORS } from "../../constants/Colors";
+
 import MediaLibraryItem from "../showMediaFromPhone/MediaLibraryItem";
 
-const MediaPicker = () => {
-  const [pickedMediaList, setPickedMediaList] = useState([]);
+import { COLORS } from "../../constants/Colors";
+import { getThemeColors } from "../../utilities/theme";
+import { ThemeContext } from "../../context/ThemeContext";
+
+import {
+  getDevicesMedia,
+  selectedMediaList,
+  setSelectedMediaList,
+} from "../../redux/slices/DevicesMedia";
+import { useDispatch, useSelector } from "react-redux";
+
+const MediaPicker = ({ albums, photos, onSelect }) => {
+  const selectedMedia = useSelector(selectedMediaList);
+
+  const dispatch = useDispatch();
+
   const [focusedIndex, setFocusedIndex] = useState(0);
   const [multipleSelection, setMultipleSelection] = useState(false);
 
-  const [photos, setPhotos] = useState([0]);
-  const [albums, setAlbums] = useState([]);
   const [selectedAlbum, setSelectedAlbum] = useState("Camera");
 
   const { theme, isDarkLogo } = useContext(ThemeContext);
@@ -62,12 +65,12 @@ const MediaPicker = () => {
   const handleMediaSubmit = useCallback(() => {
     // add media to server/context so that we can use it in other screens
     // after submit we move to location picker component
-    if (pickedMediaList?.length > 0) {
+    if (selectedMedia?.length > 0) {
       navigation?.navigate("PreviewPost");
     } else {
       Alert.alert("No media picked!", "You have to add media content first!");
     }
-  }, [pickedMediaList]);
+  }, [selectedMedia]);
 
   const multipleSelectionHandler = () => {
     setMultipleSelection(!multipleSelection);
@@ -114,15 +117,18 @@ const MediaPicker = () => {
   //   }
   // };
 
+  // delete????
   const pickMediaHandler = async (media) => {
     if (media) {
-      setPickedMediaList([
-        ...pickedMediaList,
-        {
-          ...media,
-          type: media.mediaType,
-        },
-      ]);
+      dispatch(
+        setSelectedMediaList([
+          ...selectedMedia,
+          {
+            ...media,
+            type: media.mediaType,
+          },
+        ])
+      );
     }
   };
 
@@ -141,7 +147,7 @@ const MediaPicker = () => {
 
     if (!response?.canceled) {
       const imageList = [{ uri: response?.assets[0]?.uri, type: "image" }];
-      setPickedMediaList(imageList);
+      dispatch(setSelectedMediaList(imageList));
     }
   };
 
@@ -157,42 +163,11 @@ const MediaPicker = () => {
     [setFocusedIndex]
   );
 
-  const getAlbumsList = async () => {
-    const albums = await getAlbumsAsync();
-    //   {"assetCount": 861, "id": "-1739773001", "title": "Camera"}
-
-    setAlbums(albums);
-  };
-
-  const getPhotos = async (albumName) => {
-    const { status } = await requestPermissionsAsync();
-
-    if (status === "granted") {
-      const album = await getAlbumAsync(albumName);
-
-      const photos = await getAssetsAsync({
-        first: 100,
-        album: album,
-        sortBy: "creationTime",
-        mediaType: ["photo", "video", "audio", "unknown"],
-      });
-
-      setPhotos(photos.assets);
-    }
-  };
-
-  useEffect(() => {
-    getAlbumsList();
-    getPhotos(selectedAlbum);
-  }, [selectedAlbum]);
-
-  useEffect(() => {
-    return () => {
-      setMultipleSelection(false);
-      setPickedMediaList([]);
-      setFocusedIndex(null);
-    };
-  }, [isFocused]);
+  // useEffect(() => {
+  //   setMultipleSelection(false);
+  //   setPickedMediaList([]);
+  //   setFocusedIndex(null);
+  // }, [isFocused]);
 
   useLayoutEffect(() => {
     navigation?.setOptions({
@@ -214,7 +189,7 @@ const MediaPicker = () => {
         />
       ),
     });
-  }, [navigation, textColor, pickedMediaList]);
+  }, [navigation, textColor, selectedMedia]);
 
   return (
     <View style={styles.container}>
@@ -223,13 +198,13 @@ const MediaPicker = () => {
           <>
             <View style={styles.mediaListContainer}>
               <MediaList
-                pickedMediaList={pickedMediaList}
+                pickedMediaList={selectedMedia}
                 onScroll={handleScroll}
                 focusedIndex={focusedIndex}
               />
             </View>
             <ScrollDots
-              number={pickedMediaList?.length}
+              number={selectedMedia?.length}
               focusedIndex={focusedIndex}
             />
             <View
@@ -244,7 +219,7 @@ const MediaPicker = () => {
                 dropdownIconColor={textColor}
                 onValueChange={(itemValue) => {
                   setSelectedAlbum(itemValue);
-                  getPhotos(itemValue);
+                  dispatch(getDevicesMedia(itemValue));
                 }}
               >
                 <Picker.Item value={""} label="All" />
@@ -301,7 +276,8 @@ const MediaPicker = () => {
                 multipleSelection={multipleSelection}
                 imageStyle={{ height: (width - 8) / 4 }}
                 numberOfColumns={4}
-                onSelect={pickMediaHandler}
+                // onSelect={pickMediaHandler}
+                onSelect={onSelect}
               />
             )}
             numColumns={4}
