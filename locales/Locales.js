@@ -28,6 +28,22 @@ export const locales = {
     search: "Потражите",
     mediaPickerWarning:
       "Можете изабрати највише 10 фотографија или видео записа.",
+    invalidInput: "Погрешан унос!",
+    sigUp: "Пријавити се /Региструј налог",
+    logIn: "Пријавити се ",
+    dontHaveAccount: "Немате налог?",
+    newAccountDescription:
+      "Направи налог и моћи ћете да видите објаве својих пријатеља.",
+    forgotPassword: "Заборавили сте лозинку?",
+    password: "Лозинка",
+    inputFieldPlaceholder: "Број телефона, кориссничко име или -->email<--",
+    fullName: "Име и презиме",
+    username: "Корисничко име",
+    mobileOrEmail: "Број телефона или еmail",
+    troubleLoggingIn: "Проблеми приликом пријављивања?",
+    forgetPasswordDescripion:
+      "Унесите Ваш --email--, број телефона или корисничко име и послаћемо Вам линк како бисте приступили Вашем налогу.",
+    sendCode: "Пошаљи код",
   },
   english: {
     likes: "likes",
@@ -57,5 +73,21 @@ export const locales = {
     seeAll: "See All",
     search: "Search",
     mediaPickerWarning: "The limit is 10 photos or videos.",
+    invalidInput: "Invalid input!",
+    sigUp: "Sign up",
+    logIn: "Log In",
+    dontHaveAccount: "Don't have an account?",
+    newAccountDescription:
+      "Sign up to see photos and videos from your friends.",
+    forgotPassword: "Forgot password?",
+    password: "Password",
+    inputFieldPlaceholder: "Phone number, username or -->email<--",
+    fullName: "Full Name",
+    username: "Username",
+    mobileOrEmail: "Mobile Number or Email",
+    troubleLoggingIn: "Trouble logging in?",
+    forgetPasswordDescripion:
+      "Enter your --email--, phone, or username and we'll send you a link to get back into your account.",
+    sendCode: "Send code",
   },
 };
