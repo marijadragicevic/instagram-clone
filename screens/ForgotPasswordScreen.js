@@ -1,11 +1,17 @@
-import { View, Text, StyleSheet, Image, TextInput } from "react-native";
-import { Feather } from "@expo/vector-icons";
-import InputField from "../components/ui/InputField";
-import { useLayoutEffect, useState } from "react";
+import { useState } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+import { useSelector } from "react-redux";
+import { getLanguage } from "../redux/slices/Translation";
+
 import OutlineButton from "../components/ui/OutlineButton";
+import InputField from "../components/ui/InputField";
+
 import { COLORS } from "../constants/Colors";
+import { locales } from "../locales/Locales";
 
 const ForgotPasswordScreen = () => {
+  const selectedLanguage = useSelector(getLanguage);
+
   const [email, setEmail] = useState({
     value: "",
     error: "",
@@ -49,8 +55,7 @@ const ForgotPasswordScreen = () => {
       </View>
       <Text style={styles.title}>Trouble logging in?</Text>
       <Text style={styles.text}>
-        Enter your --email--, phone, or username and we'll send you a link to
-        get back into your account.
+        {locales[selectedLanguage]?.forgetPasswordDescripion}
       </Text>
       <View style={styles.innerContainer}>
         <InputField
@@ -58,14 +63,14 @@ const ForgotPasswordScreen = () => {
           error={email.error}
           onChangeText={handleChange}
           onSubmitEditing={handleSubmit}
-          placeholder="Email, Phone or Username"
+          placeholder={locales[selectedLanguage]?.inputFieldPlaceholder}
         />
         <OutlineButton
           style={styles.btn}
           isDisabled={email.error || !email.value ? true : false}
           onPress={handleSubmit}
         >
-          Send code
+          {locales[selectedLanguage]?.sendCode}
         </OutlineButton>
       </View>
     </View>

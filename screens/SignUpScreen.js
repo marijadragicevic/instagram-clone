@@ -1,11 +1,18 @@
-import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import React, { useState } from "react";
-import { Image } from "react-native";
+import { View, Text, StyleSheet, ScrollView, Image } from "react-native";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../redux/slices/Translation";
+
 import InputField from "../components/ui/InputField";
 import OutlineButton from "../components/ui/OutlineButton";
+
 import { COLORS } from "../constants/Colors";
+import { locales } from "../locales/Locales";
 
 const SignUpScreen = ({ navigation }) => {
+  const selectedLanguage = useSelector(getLanguage);
+
   const [signupFields, setSignupFields] = useState({
     email: { value: "", error: "" },
     fullName: { value: "", error: "" },
@@ -34,7 +41,9 @@ const SignUpScreen = ({ navigation }) => {
 
   const handleChange = (field, enteredText) => {
     const hasSpace = enteredText?.length > 0 && enteredText?.includes(" ");
-    const errorMessage = hasSpace ? "Invalid input!" : "";
+    const errorMessage = hasSpace
+      ? locales[selectedLanguage]?.invalidInput
+      : "";
 
     setSignupFields({
       ...signupFields,
@@ -78,35 +87,35 @@ const SignUpScreen = ({ navigation }) => {
               resizeMode="contain"
             />
             <Text style={styles.text}>
-              Sign up to see photos and videos from your friends.
+              {locales[selectedLanguage]?.newAccountDescription}
             </Text>
             <InputField
               value={email.value}
               error={email.error}
               onChangeText={handleChange.bind(this, "email")}
               onSubmitEditing={handleSubmit}
-              placeholder="Mobile Number or Email"
+              placeholder={locales[selectedLanguage]?.mobileOrEmail}
             />
             <InputField
               value={fullName.value}
               error={fullName.error}
               onChangeText={handleChange.bind(this, "fullName")}
               onSubmitEditing={handleSubmit}
-              placeholder="Full Name"
+              placeholder={locales[selectedLanguage]?.fullName}
             />
             <InputField
               value={username.value}
               error={username.error}
               onChangeText={handleChange.bind(this, "username")}
               onSubmitEditing={handleSubmit}
-              placeholder="Username"
+              placeholder={locales[selectedLanguage]?.username}
             />
             <InputField
               value={password.value}
               error={password.error}
               onChangeText={handleChange.bind(this, "password")}
               onSubmitEditing={handleSubmit}
-              placeholder="Password"
+              placeholder={locales[selectedLanguage]?.password}
               secureTextEntry={true}
             />
             <OutlineButton
@@ -121,7 +130,7 @@ const SignUpScreen = ({ navigation }) => {
               }
               onPress={handleSubmit}
             >
-              Sign up
+              {locales[selectedLanguage]?.signUp}
             </OutlineButton>
           </View>
         </View>

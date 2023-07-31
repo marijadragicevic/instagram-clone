@@ -1,3 +1,6 @@
+import { useSelector } from "react-redux";
+import { getLanguage } from "../redux/slices/Translation";
+
 import { NavigationContainer } from "@react-navigation/native";
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -15,6 +18,7 @@ import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
 import { COLORS } from "../constants/Colors";
+import { locales } from "../locales/Locales";
 
 import HomeScreen from "../screens/HomeScreen";
 import NewPostScreen from "../screens/AddPostScreens/NewPostScreen";
@@ -42,6 +46,8 @@ const TopTabs = createMaterialTopTabNavigator();
 const SideNavigation = ({ navigation }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   return (
     <BottomTabs.Navigator
@@ -88,7 +94,7 @@ const SideNavigation = ({ navigation }) => {
           tabBarIcon: ({ color, focused, size }) => (
             <Feather name="plus-square" size={28} color={color} />
           ),
-          title: "New Post",
+          title: locales[selectedLanguage]?.newPostTitle,
           tabBarStyle: { display: "none" },
         }}
       />
@@ -135,6 +141,8 @@ const Navigation = () => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
+  const selectedLanguage = useSelector(getLanguage);
+
   return (
     <NavigationContainer>
       <Stack.Navigator
@@ -149,7 +157,6 @@ const Navigation = () => {
           component={SideNavigation}
           options={{ headerShown: false }}
         />
-
         {/* login / signup / forget password */}
         <Stack.Screen
           name="LoginScreen"
@@ -159,7 +166,7 @@ const Navigation = () => {
         <Stack.Screen
           name="SignUpScreen"
           component={SignUpScreen}
-          options={{ title: "Sign Up" }}
+          options={{ title: locales[selectedLanguage]?.signUp }}
         />
         <Stack.Screen
           name="ForgotPasswordScreen"
@@ -174,7 +181,7 @@ const Navigation = () => {
         <Stack.Screen
           name="CommentViewScreen"
           component={CommentViewScreen}
-          options={{ title: "Comments" }}
+          options={{ title: locales[selectedLanguage]?.commentsTitle }}
         />
 
         {/* story screens */}
@@ -190,7 +197,7 @@ const Navigation = () => {
         <Stack.Screen
           name="LocationPickerScreen"
           component={LocationPickerScreen}
-          options={{ title: "Add Location" }}
+          options={{ title: locales[selectedLanguage]?.addLocation }}
         />
 
         <Stack.Screen

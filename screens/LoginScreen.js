@@ -1,18 +1,18 @@
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  View,
-  Text,
-  Image,
-  TextInput,
-} from "react-native";
+import { useState } from "react";
+import { Pressable, StyleSheet, View, Text, Image } from "react-native";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../redux/slices/Translation";
+
 import OutlineButton from "../components/ui/OutlineButton";
-import { useEffect, useState } from "react";
 import InputField from "../components/ui/InputField";
+
 import { COLORS } from "../constants/Colors";
+import { locales } from "../locales/Locales";
 
 const LoginScreen = ({ navigation }) => {
+  const selectedLanguage = useSelector(getLanguage);
+
   const [loginFields, setLoginFields] = useState({
     email: { value: "", error: "" },
     password: { value: "", error: "" },
@@ -29,7 +29,9 @@ const LoginScreen = ({ navigation }) => {
 
   const handleChange = (field, enteredText) => {
     const hasSpace = enteredText?.length > 0 && enteredText?.includes(" ");
-    const errorMessage = hasSpace ? "Invalid input!" : "";
+    const errorMessage = hasSpace
+      ? locales[selectedLanguage]?.invalidInput
+      : "";
 
     setLoginFields({
       ...loginFields,
@@ -76,14 +78,14 @@ const LoginScreen = ({ navigation }) => {
             error={email.error}
             onChangeText={handleChange.bind(this, "email")}
             onSubmitEditing={handleSubmit}
-            placeholder="Phone number, username or -->email<--"
+            placeholder={locales[selectedLanguage]?.inputFieldPlaceholder}
           />
           <InputField
             value={password.value}
             error={password.error}
             onChangeText={handleChange.bind(this, "password")}
             onSubmitEditing={handleSubmit}
-            placeholder="Password"
+            placeholder={locales[selectedLanguage]?.password}
             secureTextEntry={true}
           />
           <Pressable
@@ -93,7 +95,9 @@ const LoginScreen = ({ navigation }) => {
             ]}
             onPress={() => handleRedirect("ForgotPasswordScreen")}
           >
-            <Text style={styles.btnText}>Forgot password?</Text>
+            <Text style={styles.btnText}>
+              {locales[selectedLanguage]?.forgotPassword}
+            </Text>
           </Pressable>
           <OutlineButton
             style={styles.btn}
@@ -104,16 +108,18 @@ const LoginScreen = ({ navigation }) => {
             }
             onPress={handleSubmit}
           >
-            Log In
+            {locales[selectedLanguage]?.logIn}
           </OutlineButton>
         </View>
         <View style={styles.signupContainer}>
-          <Text>Don't have an account?</Text>
+          <Text>{locales[selectedLanguage]?.dontHaveAccount}</Text>
           <Pressable
             style={({ pressed }) => [pressed && styles.pressed]}
             onPress={() => handleRedirect("SignUpScreen")}
           >
-            <Text style={styles.btnText}>Sign up</Text>
+            <Text style={styles.btnText}>
+              {locales[selectedLanguage]?.signUp}
+            </Text>
           </Pressable>
         </View>
       </View>

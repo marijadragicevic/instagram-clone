@@ -29,7 +29,7 @@ export const locales = {
     mediaPickerWarning:
       "Можете изабрати највише 10 фотографија или видео записа.",
     invalidInput: "Погрешан унос!",
-    sigUp: "Пријавити се /Региструј налог",
+    signUp: "Пријавити се /Региструј налог",
     logIn: "Пријавити се ",
     dontHaveAccount: "Немате налог?",
     newAccountDescription:
@@ -74,7 +74,7 @@ export const locales = {
     search: "Search",
     mediaPickerWarning: "The limit is 10 photos or videos.",
     invalidInput: "Invalid input!",
-    sigUp: "Sign up",
+    signUp: "Sign Up",
     logIn: "Log In",
     dontHaveAccount: "Don't have an account?",
     newAccountDescription:
