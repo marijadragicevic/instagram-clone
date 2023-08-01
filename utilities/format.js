@@ -17,11 +17,10 @@ export const formatDuration = (time) => {
   return minutes + " : " + seconds;
 };
 
-export const formatText = (text) => {
-  const result =
-    text?.length > 11
-      ? text?.slice(0, 10).toLowerCase() + "..."
-      : text.toLowerCase();
+export const formatText = (text, toLowerCase = true, maxLength = 11) => {
+  const editedText =
+    text?.length > maxLength ? text?.slice(0, maxLength - 1) + "..." : text;
+  const result = toLowerCase ? editedText.toLowerCase() : editedText;
 
   return result;
 };

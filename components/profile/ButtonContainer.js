@@ -1,14 +1,22 @@
 import { useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import Button from "../ui/Button";
 import IconButton from "../ui/IconButton";
 import UsersList from "./UsersList";
+
 import { COLORS } from "../../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
 import { loggedInUser } from "../../screens/MessagesScreen";
+import { locales } from "../../locales/Locales";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
+import { formatText } from "../../utilities/format";
 
 const ButtonContainer = ({ textColor, isLightTheme, user }) => {
+  const selectedLanguage = useSelector(getLanguage);
+
   const [isActive, setIsActive] = useState(false);
   const [isLoggedInUser, setIsLoggedInUser] = useState(true);
   const [isFollowing, setIsFollowing] = useState(false);
@@ -50,7 +58,9 @@ const ButtonContainer = ({ textColor, isLightTheme, user }) => {
                 setIsFollowing(!isFollowing);
               }}
             >
-              {isFollowing ? "Following" : "Follow"}
+              {isFollowing
+                ? locales[selectedLanguage]?.following
+                : locales[selectedLanguage]?.follow}
             </Button>
             <Button
               style={[
@@ -64,7 +74,7 @@ const ButtonContainer = ({ textColor, isLightTheme, user }) => {
               styleText={[styles.text]}
               onPress={() => navigation.navigate("MessageChat", { user: user })}
             >
-              Message
+              {locales[selectedLanguage]?.message}
             </Button>
           </>
         ) : (
@@ -80,7 +90,7 @@ const ButtonContainer = ({ textColor, isLightTheme, user }) => {
               ]}
               styleText={styles.text}
             >
-              Edit profile
+              {formatText(locales[selectedLanguage]?.editProfile, false, 13)}
             </Button>
             <Button
               style={[
@@ -93,7 +103,7 @@ const ButtonContainer = ({ textColor, isLightTheme, user }) => {
               ]}
               styleText={styles.text}
             >
-              Share profile
+              {locales[selectedLanguage]?.shareProfile}
             </Button>
           </>
         )}

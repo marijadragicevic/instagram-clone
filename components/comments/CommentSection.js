@@ -4,13 +4,21 @@ import { View, Text, StyleSheet, Image } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getThemeColors } from "../../utilities/theme";
+
 import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
 import IconButton from "../ui/IconButton";
 import Button from "../ui/Button";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../../redux/slices/Translation";
 
 const CommentSection = ({ post, isMain = true }) => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const [isLiked, setIsLiked] = useState(false);
 
@@ -60,7 +68,7 @@ const CommentSection = ({ post, isMain = true }) => {
         </Text>
         {!isMain && (
           <Button styleText={{ color: COLORS.global.grey500, fontSize: 13 }}>
-            Reply
+            {locales[selectedLanguage]?.reply}
           </Button>
         )}
       </View>

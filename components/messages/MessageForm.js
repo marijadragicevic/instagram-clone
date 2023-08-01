@@ -16,6 +16,9 @@ import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
 import { useContext } from "react";
 import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+import { useSelector } from "react-redux";
+import { getLanguage } from "../../redux/slices/Translation";
 
 const MessageForm = ({ messageList, onAddNewMessage }) => {
   const [message, setMessage] = useState("");
@@ -23,6 +26,8 @@ const MessageForm = ({ messageList, onAddNewMessage }) => {
 
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const [cameraPermissionInfo, requestCameraPermission] =
     useCameraPermissions();
@@ -125,7 +130,7 @@ const MessageForm = ({ messageList, onAddNewMessage }) => {
         />
         <TextInput
           style={[styles.input, { color: textColor }]}
-          placeholder="Enter message..."
+          placeholder={locales[selectedLanguage]?.enterMessage}
           placeholderTextColor={
             !isDarkLogo ? COLORS.global.white : COLORS.global.lightGrey550
           }
@@ -141,7 +146,7 @@ const MessageForm = ({ messageList, onAddNewMessage }) => {
             styleText={styles.outlineBtnText}
             onPress={handleSendMessage}
           >
-            Send
+            {locales[selectedLanguage]?.send}
           </OutlineButton>
         ) : (
           <IconButton

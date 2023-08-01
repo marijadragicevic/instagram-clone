@@ -2,6 +2,7 @@ export const locales = {
   serbian: {
     likes: "свиђања",
     viewAllComments: "Прикажи све коментаре",
+    viewComment: "Прикажи коментар",
     newPostTitle: "Нова објава",
     noContent: "",
     addCaption: "Унесите опис...",
@@ -20,7 +21,8 @@ export const locales = {
     followers: "Пратиоци",
     following: "Прати",
     follow: "Прати",
-    replyComment: "Одговорите",
+    aboutUser: "О кориснику",
+    reply: "Одговорите",
     commentsTitle: "Коментари",
     addNewComent: "Додајте коментар...",
     discoverPeople: "Откријте људе",
@@ -44,10 +46,14 @@ export const locales = {
     forgetPasswordDescripion:
       "Унесите Ваш --email--, број телефона или корисничко име и послаћемо Вам линк како бисте приступили Вашем налогу.",
     sendCode: "Пошаљи код",
+    enterMessage: "Пошаљите поруку...",
+    send: "Пошаљи",
+    tagged: "Означене објаве",
   },
   english: {
     likes: "likes",
     viewAllComments: "View all comments",
+    viewComment: "View comment",
     newPostTitle: "New Post",
     noContent: "No media content.",
     addCaption: "Add caption...",
@@ -66,7 +72,8 @@ export const locales = {
     followers: "Followers",
     following: "Following",
     follow: "Follow",
-    replyComment: "Reply",
+    aboutUser: "About user",
+    reply: "Reply",
     commentsTitle: "Comments",
     addNewComent: "Add a comment",
     discoverPeople: "Discover people",
@@ -89,5 +96,8 @@ export const locales = {
     forgetPasswordDescripion:
       "Enter your --email--, phone, or username and we'll send you a link to get back into your account.",
     sendCode: "Send code",
+    enterMessage: "Enter message...",
+    send: "Send",
+    tagged: "Tagged",
   },
 };

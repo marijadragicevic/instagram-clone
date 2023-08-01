@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import {
   View,
   Text,
@@ -6,17 +7,23 @@ import {
   Dimensions,
   StyleSheet,
 } from "react-native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 
 import VideoPlayer from "./VideoPlayer";
-import { useContext } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getThemeColors } from "../../utilities/theme";
-import { useIsFocused, useNavigation } from "@react-navigation/native";
+
 import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../../redux/slices/Translation";
 
 const MediaList = ({ onScroll, pickedMediaList, focusedIndex }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const isFocused = useIsFocused();
   const navigation = useNavigation();
@@ -56,7 +63,7 @@ const MediaList = ({ onScroll, pickedMediaList, focusedIndex }) => {
       ) : (
         <View style={[styles.notificationContainer, { width: width }]}>
           <Text style={[styles.notificationText, { color: textColor }]}>
-            No media content.
+            {locales[selectedLanguage]?.noContent}
           </Text>
         </View>
       )}

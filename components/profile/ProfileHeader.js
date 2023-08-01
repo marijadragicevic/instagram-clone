@@ -1,15 +1,23 @@
-import { View, Text, StyleSheet, Image } from "react-native";
 import React, { useContext } from "react";
+import { View, Text, StyleSheet, Image } from "react-native";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
-import { loggedInUser } from "../../screens/MessagesScreen";
-import { COLORS } from "../../constants/Colors";
+
 import ButtonContainer from "./ButtonContainer";
+
+import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const ProfileHeader = ({ user }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   return (
     <>
@@ -45,15 +53,21 @@ const ProfileHeader = ({ user }) => {
           <View style={styles.infoContainer}>
             <View style={styles.infoInnerContainer}>
               <Text style={[styles.boldText, { color: textColor }]}>3</Text>
-              <Text style={[styles.text, { color: textColor }]}>Posts</Text>
+              <Text style={[styles.text, { color: textColor }]}>
+                {locales[selectedLanguage]?.posts}
+              </Text>
             </View>
             <View style={styles.infoInnerContainer}>
               <Text style={[styles.boldText, { color: textColor }]}>166</Text>
-              <Text style={[styles.text, { color: textColor }]}>Followers</Text>
+              <Text style={[styles.text, { color: textColor }]}>
+                {locales[selectedLanguage]?.followers}
+              </Text>
             </View>
             <View style={styles.infoInnerContainer}>
               <Text style={[styles.boldText, { color: textColor }]}>235</Text>
-              <Text style={[styles.text, { color: textColor }]}>Following</Text>
+              <Text style={[styles.text, { color: textColor }]}>
+                {locales[selectedLanguage]?.following}
+              </Text>
             </View>
           </View>
         </View>

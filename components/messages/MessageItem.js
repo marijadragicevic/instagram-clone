@@ -1,23 +1,33 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
 import React, { useContext } from "react";
+import { View, Image, Text, StyleSheet, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { LinearGradient } from "expo-linear-gradient";
-import { Image } from "react-native";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getThemeColors } from "../../utilities/theme";
-import { useNavigation } from "@react-navigation/native";
+
 import Description from "../ui/Description";
+
 import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const MessageItem = (props) => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const navigation = useNavigation();
 
   return (
     <>
       {props?.index === 0 && (
-        <Description color={textColor}>Messages</Description>
+        <Description color={textColor}>
+          {locales[selectedLanguage]?.messages}
+        </Description>
       )}
       <Pressable
         style={[styles.outerContainer]}

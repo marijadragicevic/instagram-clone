@@ -1,12 +1,22 @@
+import { useState } from "react";
 import { View, StyleSheet, Text, Image } from "react-native";
 
 import IconButton from "../ui/IconButton";
-import { COLORS } from "../../constants/Colors";
 import Button from "../ui/Button";
-import { useState } from "react";
+
+import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
 import { formatText } from "../../utilities/format";
 
-const User = ({ item, onRemove, textColor, backgroundColor, isLightTheme }) => {
+const User = ({
+  item,
+  onRemove,
+  textColor,
+  backgroundColor,
+  isLightTheme,
+  selectedLanguage,
+}) => {
   const [isFollowing, setIsFollowing] = useState(false);
 
   const formatedUserText = formatText(item?.user);
@@ -27,7 +37,9 @@ const User = ({ item, onRemove, textColor, backgroundColor, isLightTheme }) => {
       <Text style={[styles.text, { color: textColor }]}>
         {formatedUserText}
       </Text>
-      <Text style={{ color: COLORS.global.lightGrey500 }}>About user</Text>
+      <Text style={{ color: COLORS.global.lightGrey500 }}>
+        {locales[selectedLanguage]?.aboutUser}
+      </Text>
       <Button
         style={[
           styles.button,
@@ -50,7 +62,9 @@ const User = ({ item, onRemove, textColor, backgroundColor, isLightTheme }) => {
           setIsFollowing(!isFollowing);
         }}
       >
-        {isFollowing ? "Following" : "Follow"}
+        {isFollowing
+          ? locales[selectedLanguage]?.following
+          : locales[selectedLanguage]?.follow}
       </Button>
     </View>
   );

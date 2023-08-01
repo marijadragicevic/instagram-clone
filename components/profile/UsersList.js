@@ -1,18 +1,25 @@
 import { useState, useContext } from "react";
 import { FlatList, View, StyleSheet, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
+import User from "./User";
+import Button from "../ui/Button";
 
 import { USERS } from "../../data/users";
-import User from "./User";
+import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
 
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
-import Button from "../ui/Button";
-import { COLORS } from "../../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const UsersList = () => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const isLightTheme = theme === "light";
 
@@ -28,12 +35,14 @@ const UsersList = () => {
   return (
     <View style={styles.container}>
       <View style={styles.btnContainer}>
-        <Text style={[styles.text, { color: textColor }]}>Discover people</Text>
+        <Text style={[styles.text, { color: textColor }]}>
+          {locales[selectedLanguage]?.discoverPeople}
+        </Text>
         <Button
           styleText={styles.btnText}
           onPress={() => navigation.navigate("NotificationScreen")}
         >
-          See all
+          {locales[selectedLanguage]?.seeAll}
         </Button>
       </View>
       <FlatList
@@ -48,6 +57,7 @@ const UsersList = () => {
             textColor={textColor}
             backgroundColor={backgroundColor}
             isLightTheme={isLightTheme}
+            selectedLanguage={selectedLanguage}
           />
         )}
         nestedScrollEnabled

@@ -1,14 +1,24 @@
-import { View, Text, TextInput, StyleSheet, Image } from "react-native";
 import React, { useContext, useState } from "react";
+import { View, TextInput, StyleSheet, Image } from "react-native";
+
+import Button from "../ui/Button";
+
 import { LinearGradient } from "expo-linear-gradient";
+
 import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
-import Button from "../ui/Button";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const AddComment = ({ isInputInFocus }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const [comment, setComment] = useState({
     value: "",
@@ -61,7 +71,7 @@ const AddComment = ({ isInputInFocus }) => {
       </LinearGradient>
       <TextInput
         value={comment.value}
-        placeholder={"Add a comment for " + "USER's POST"}
+        placeholder={locales[selectedLanguage]?.addNewComent + " USER's POST"}
         placeholderTextColor={COLORS.global.grey400}
         onChangeText={handleChange}
         style={[styles.input, { color: textColor }]}
@@ -73,7 +83,7 @@ const AddComment = ({ isInputInFocus }) => {
         isDisabled={!comment.value || comment.error ? true : false}
         onPress={handleSubmit}
       >
-        Post
+        {locales[selectedLanguage]?.post}
       </Button>
     </View>
   );

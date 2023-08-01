@@ -1,14 +1,21 @@
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import { useContext } from "react";
+import { View, TextInput, StyleSheet, Pressable } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import { useContext, useState } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getThemeColors } from "../../utilities/theme";
+
 import { COLORS } from "../../constants/Colors";
 import { USERS } from "../../data/users";
+import { locales } from "../../locales/Locales";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const SearcForm = ({ setSearchResult }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const handleSearch = (enteredText) => {
     if (!enteredText) {
@@ -37,7 +44,7 @@ const SearcForm = ({ setSearchResult }) => {
           // value={searchedValue}
           onChangeText={handleSearch}
           style={[styles.input, { color: textColor }]}
-          placeholder="Search"
+          placeholder={locales[selectedLanguage]?.search}
           placeholderTextColor={textColor}
         />
         <View style={[styles.iconContainer]}>

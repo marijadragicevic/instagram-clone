@@ -1,14 +1,23 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import React, { useContext } from "react";
-import { LinearGradient } from "expo-linear-gradient";
-import { COLORS } from "../../constants/Colors";
-import { Image } from "react-native";
-import { getThemeColors } from "../../utilities/theme";
-import { ThemeContext } from "../../context/ThemeContext";
-import IconButton from "../ui/IconButton";
+import { useContext } from "react";
+import { View, Text, StyleSheet, Pressable, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
-const ResultItem = ({ user, image, type, onDeleteHistoryItem }) => {
+import IconButton from "../ui/IconButton";
+
+import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
+import { LinearGradient } from "expo-linear-gradient";
+import { getThemeColors } from "../../utilities/theme";
+import { ThemeContext } from "../../context/ThemeContext";
+
+const ResultItem = ({
+  user,
+  image,
+  type,
+  onDeleteHistoryItem,
+  selectedLanguage,
+}) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
@@ -55,7 +64,7 @@ const ResultItem = ({ user, image, type, onDeleteHistoryItem }) => {
       </LinearGradient>
       <View style={styles.infoContainer}>
         <Text style={[styles.mainText, { color: textColor }]}>{user}</Text>
-        <Text style={[styles.text]}>full name</Text>
+        <Text style={[styles.text]}>{locales[selectedLanguage]?.fullName}</Text>
       </View>
       {type === "history" && (
         <IconButton

@@ -1,21 +1,26 @@
 import { useContext } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 import { ThemeContext } from "../../../context/ThemeContext";
 import { getThemeColors } from "../../../utilities/theme";
 
 import PostIconsFooter from "./PostIconsFooter";
-import { COLORS } from "../../../constants/Colors";
-import { useNavigation } from "@react-navigation/native";
 
-const Likes = ({ post }) => {
+import { COLORS } from "../../../constants/Colors";
+import { locales } from "../../../locales/Locales";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../../../redux/slices/Translation";
+
+const Likes = ({ post, selectedLanguage }) => {
   const { theme } = useContext(ThemeContext);
   const { textColor } = getThemeColors(theme);
 
   return (
     <View style={styles.likesContainer}>
       <Text style={[styles.text, { color: textColor }]}>
-        {post.likes.toLocaleString("en")} likes
+        {post.likes.toLocaleString("en")} {locales[selectedLanguage]?.likes}
       </Text>
     </View>
   );
@@ -29,22 +34,19 @@ const Caption = ({ user, content }) => {
     <View style={styles.captionContainer}>
       <Text style={[styles.text, { color: textColor }]}>
         <Text>{user}</Text>
-        <Text style={styles.captionText}>
-          {"  "}
-          {content}
-        </Text>
+        <Text style={styles.captionText}>{content}</Text>
       </Text>
     </View>
   );
 };
 
-const CommentsSection = ({ post, index }) => {
+const CommentsSection = ({ post, index, selectedLanguage }) => {
   const navigation = useNavigation();
 
   const content =
     post?.comments?.length > 1
-      ? `View all comments (${post?.comments?.length})`
-      : `View comment (${post?.comments?.length})`;
+      ? `${locales[selectedLanguage]?.viewAllComments} (${post?.comments?.length})`
+      : `${locales[selectedLanguage]?.viewComment} (${post?.comments?.length})`;
 
   return (
     <View style={{ alignItems: "flex-start" }}>
@@ -79,6 +81,8 @@ const CommentsSection = ({ post, index }) => {
 const PostFooter = ({ post, index, isLiked, handleLikePost }) => {
   const isCommentVisible = post?.comments?.length > 0;
 
+  const selectedLanguage = useSelector(getLanguage);
+
   return (
     <View style={styles.container}>
       <PostIconsFooter
@@ -87,9 +91,15 @@ const PostFooter = ({ post, index, isLiked, handleLikePost }) => {
         isLiked={isLiked}
         handleLikePost={handleLikePost}
       />
-      <Likes post={post} />
+      <Likes post={post} selectedLanguage={selectedLanguage} />
       <Caption user={post.user} content={post.caption} />
-      {isCommentVisible && <CommentsSection post={post} index={index} />}
+      {isCommentVisible && (
+        <CommentsSection
+          post={post}
+          index={index}
+          selectedLanguage={selectedLanguage}
+        />
+      )}
     </View>
   );
 };

@@ -26,7 +26,9 @@ const ForgotPasswordScreen = () => {
 
   const handleChange = (enteredText = "") => {
     const hasSpace = enteredText?.includes(" ");
-    const errorMessage = hasSpace ? "Invalid input!" : "";
+    const errorMessage = hasSpace
+      ? locales[selectedLanguage]?.invalidInput
+      : "";
 
     setEmail({ value: enteredText, error: errorMessage });
   };
@@ -53,7 +55,9 @@ const ForgotPasswordScreen = () => {
       <View style={styles.iconContainer}>
         <Image source={require("../assets/lock.png")} />
       </View>
-      <Text style={styles.title}>Trouble logging in?</Text>
+      <Text style={styles.title}>
+        {locales[selectedLanguage]?.troubleLoggingIn}
+      </Text>
       <Text style={styles.text}>
         {locales[selectedLanguage]?.forgetPasswordDescripion}
       </Text>

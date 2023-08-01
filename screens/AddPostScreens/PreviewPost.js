@@ -1,4 +1,4 @@
-import { useContext, useEffect, useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,25 @@ import {
   Image,
   Pressable,
 } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 import { ThemeContext } from "../../context/ThemeContext";
-
 import { getThemeColors } from "../../utilities/theme";
 
 import IconButton from "../../components/ui/IconButton";
-import { COLORS } from "../../constants/Colors";
 import PreviewLocation from "../../components/newPost/PreviewLocation";
-import { useIsFocused } from "@react-navigation/native";
+
+import { COLORS } from "../../constants/Colors";
+import { locales } from "../../locales/Locales";
+
+import { useSelector } from "react-redux";
+import { getLanguage } from "../../redux/slices/Translation";
 
 const PreviewPost = ({ navigation, route }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
+
+  const selectedLanguage = useSelector(getLanguage);
 
   const isFocused = useIsFocused();
 
@@ -53,7 +59,7 @@ const PreviewPost = ({ navigation, route }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "New Post",
+      title: locales[selectedLanguage]?.newPostTitle,
       headerRight: () => (
         <IconButton
           icon="check"
@@ -77,7 +83,7 @@ const PreviewPost = ({ navigation, route }) => {
         <TextInput
           style={[styles.input, styles.text, { color: textColor }]}
           placeholderTextColor={textColor}
-          placeholder="Add caption..."
+          placeholder={locales[selectedLanguage]?.addCaption}
           multiline
         />
       </View>
@@ -88,7 +94,9 @@ const PreviewPost = ({ navigation, route }) => {
           pressed && styles.pressed,
         ]}
       >
-        <Text style={[styles.text, { color: textColor }]}>Tag people</Text>
+        <Text style={[styles.text, { color: textColor }]}>
+          {locales[selectedLanguage]?.tagPeople}
+        </Text>
       </Pressable>
       {lat && long && address ? (
         <View style={styles.innerContainer}>
@@ -119,7 +127,9 @@ const PreviewPost = ({ navigation, route }) => {
           ]}
           onPress={handleLocationPicker}
         >
-          <Text style={[styles.text, { color: textColor }]}>Add location</Text>
+          <Text style={[styles.text, { color: textColor }]}>
+            {locales[selectedLanguage]?.addLocation}
+          </Text>
         </Pressable>
       )}
 
@@ -130,7 +140,9 @@ const PreviewPost = ({ navigation, route }) => {
           pressed && styles.pressed,
         ]}
       >
-        <Text style={[styles.text, { color: textColor }]}>Add music</Text>
+        <Text style={[styles.text, { color: textColor }]}>
+          {locales[selectedLanguage]?.addMusic}
+        </Text>
       </Pressable>
       <PreviewLocation
         lat={lat}

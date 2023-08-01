@@ -1,25 +1,31 @@
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
 import { useWindowDimensions } from "react-native";
 import { SceneMap, TabBar, TabView } from "react-native-tab-view";
 
 import UserPostList from "./UserPostList";
 import UserTagedPostList from "./UserTagedPostList";
+
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
-import { useContext } from "react";
+
+import { locales } from "../../locales/Locales";
+
+import { getLanguage } from "../../redux/slices/Translation";
+import { useSelector } from "react-redux";
 
 const ProfileGallery = () => {
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
+  const selectedLanguage = useSelector(getLanguage);
+
   const layout = useWindowDimensions();
 
   const [index, setIndex] = useState(0);
   const [routes] = useState([
-    { key: "allPosts", title: "all Posts" },
-    { key: "tagedPosts", title: "taged Posts" },
+    { key: "allPosts", title: locales[selectedLanguage]?.allPosts },
+    { key: "tagedPosts", title: locales[selectedLanguage]?.tagedPosts },
   ]);
-
   const renderScene = SceneMap({
     allPosts: UserPostList,
     tagedPosts: UserTagedPostList,
