@@ -22,6 +22,7 @@ const MediaLibrary = ({
   onSelect,
   albums,
   photos,
+  type = "addPost",
 }) => {
   const [selectedAlbum, setSelectedAlbum] = useState("Camera");
 
@@ -87,11 +88,17 @@ const MediaLibrary = ({
                       </Text>
                     </View>
                   </Pressable>
-                  <MediaLibraryItem item={item} onSelect={onSelect} />
+                  <MediaLibraryItem
+                    item={item}
+                    onSelect={onSelect}
+                    type={type}
+                  />
                 </>
               );
             } else {
-              return <MediaLibraryItem item={item} onSelect={onSelect} />;
+              return (
+                <MediaLibraryItem item={item} onSelect={onSelect} type={type} />
+              );
             }
           }}
           numColumns={3}

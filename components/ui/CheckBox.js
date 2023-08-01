@@ -15,7 +15,7 @@ const CheckBox = ({ style, number = 0, isSelected, type = "checkbox" }) => {
 
   return (
     <View style={[styles.outerContainer, style]}>
-      {type === "selected" ? (
+      {((type === "addStory" && isSelected) || type === "addPost") && (
         <View
           style={[
             styles.container,
@@ -25,7 +25,8 @@ const CheckBox = ({ style, number = 0, isSelected, type = "checkbox" }) => {
         >
           <Text style={styles.text}>{isSelected && number}</Text>
         </View>
-      ) : (
+      )}
+      {type === "checkbox" && (
         <Pressable
           style={({ pressed }) => [
             styles.container,

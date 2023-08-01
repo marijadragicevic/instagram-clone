@@ -24,6 +24,13 @@ import {
 } from "../redux/slices/DevicesMedia";
 
 import { useIsFocused } from "@react-navigation/native";
+import { getLanguage } from "../redux/slices/Translation";
+import { locales } from "../locales/Locales";
+import {
+  checkForDuplicate,
+  handleUpdatePhotos,
+  handleUpdateSelectedMedia,
+} from "../utilities/Utilities";
 
 const AddStoryScreen = ({ navigation }) => {
   const isFocused = useIsFocused();
@@ -36,60 +43,28 @@ const AddStoryScreen = ({ navigation }) => {
   const selectedMedia = useSelector(selectedMediaList);
   const photos = useSelector(mediaList);
   const albums = useSelector(albumsList);
+  const selectedLanguage = useSelector(getLanguage);
 
   const addSelectedMedia = useCallback(
     (selectedPhoto) => {
-      const duplicate = selectedMedia?.find(
-        (selectedMediaItem) => selectedPhoto.id === selectedMediaItem.id
-      );
+      const duplicate = checkForDuplicate(selectedMedia, selectedPhoto?.id);
 
       if (selectedMedia?.length === 10 && !duplicate) {
-        Alert.alert("", "The limit is 10 photos or videos", [], {
+        Alert.alert("", locales[selectedLanguage]?.mediaPickerWarning, [], {
           cancelable: true,
         });
         return;
       }
 
-      const updatePhotos = photos?.map((photo) => {
-        if (selectedPhoto.id === photo.id) {
-          return {
-            ...selectedPhoto,
-            isSelected: !selectedPhoto?.isSelected,
-          };
-        }
+      const updatedPhotos = handleUpdatePhotos(photos, selectedPhoto);
+      const updatedSelectedMedia = handleUpdateSelectedMedia(
+        selectedMedia,
+        selectedPhoto,
+        duplicate
+      );
 
-        return photo;
-      });
-
-      let updateSelectedMedia = [];
-
-      if (selectedMedia?.length === 0) {
-        updateSelectedMedia = [
-          ...selectedMedia,
-          { ...selectedPhoto, isSelected: true, number: 1 },
-        ];
-      } else if (selectedMedia?.length > 0) {
-        updateSelectedMedia = duplicate
-          ? selectedMedia
-              ?.filter(
-                (selectedMediaItem) => selectedMediaItem?.id !== duplicate?.id
-              )
-              ?.map((filteredMedia, index) => ({
-                ...filteredMedia,
-                number: index + 1,
-              }))
-          : [
-              ...selectedMedia,
-              {
-                ...selectedPhoto,
-                isSelected: true,
-                number: selectedMedia?.length + 1,
-              },
-            ];
-      }
-
-      dispatch(setMediaList(updatePhotos));
-      dispatch(setSelectedMediaList(updateSelectedMedia));
+      dispatch(setMediaList(updatedPhotos));
+      dispatch(setSelectedMediaList(updatedSelectedMedia));
     },
     [selectedMedia, photos]
   );
@@ -140,6 +115,7 @@ const AddStoryScreen = ({ navigation }) => {
         onSelect={addSelectedMedia}
         photos={photos}
         albums={albums}
+        type="addStory"
       />
     </View>
   );

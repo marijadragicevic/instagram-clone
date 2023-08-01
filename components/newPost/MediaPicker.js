@@ -41,7 +41,7 @@ import {
 } from "../../redux/slices/DevicesMedia";
 import { useDispatch, useSelector } from "react-redux";
 
-const MediaPicker = ({ albums, photos, onSelect }) => {
+const MediaPicker = ({ albums, photos, onSelect, type }) => {
   const selectedMedia = useSelector(selectedMediaList);
 
   const dispatch = useDispatch();
@@ -278,6 +278,7 @@ const MediaPicker = ({ albums, photos, onSelect }) => {
                 numberOfColumns={4}
                 // onSelect={pickMediaHandler}
                 onSelect={onSelect}
+                type="addPost"
               />
             )}
             numColumns={4}

@@ -21,6 +21,7 @@ const MediaLibraryItem = ({
   multipleSelection = false,
   imageStyle,
   numberOfColumns = 3,
+  type,
 }) => {
   const selectedMedia = useSelector(selectedMediaList);
 
@@ -73,11 +74,11 @@ const MediaLibraryItem = ({
         </Text>
       )}
       {item?.isSelected && <View style={[styles.overlay, imageStyle]}></View>}
-      {multipleSelection && (
+      {(type === "addStory" || multipleSelection) && (
         <CheckBox
           style={styles.checkbox}
           isSelected={item?.isSelected}
-          type="selected"
+          type={type}
           number={number}
         />
       )}
