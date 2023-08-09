@@ -43,7 +43,7 @@ const BottomTabs = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 const TopTabs = createMaterialTopTabNavigator();
 
-const SideNavigation = ({ navigation }) => {
+const BottomTabsNavigation = ({ navigation }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
@@ -153,8 +153,8 @@ const Navigation = () => {
       >
         {/* home screen  */}
         <Stack.Screen
-          name="SideNavigation"
-          component={SideNavigation}
+          name="BottomTabsNavigation"
+          component={BottomTabsNavigation}
           options={{ headerShown: false }}
         />
         {/* login / signup / forget password */}

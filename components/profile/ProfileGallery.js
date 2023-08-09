@@ -1,9 +1,8 @@
-import { useState, useContext, useEffect } from "react";
-import { useWindowDimensions } from "react-native";
-import { SceneMap, TabBar, TabView } from "react-native-tab-view";
+import { useContext } from "react";
 
 import UserPostList from "./UserPostList";
 import UserTagedPostList from "./UserTagedPostList";
+import SwipeComponent from "../ui/animations/Swipe";
 
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
@@ -19,34 +18,21 @@ const ProfileGallery = () => {
 
   const selectedLanguage = useSelector(getLanguage);
 
-  const layout = useWindowDimensions();
-
-  const [index, setIndex] = useState(0);
-  const [routes] = useState([
-    { key: "allPosts", title: locales[selectedLanguage]?.allPosts },
-    { key: "tagedPosts", title: locales[selectedLanguage]?.tagedPosts },
-  ]);
-  const renderScene = SceneMap({
-    allPosts: UserPostList,
-    tagedPosts: UserTagedPostList,
-  });
+  const navbarList = [
+    { title: locales[selectedLanguage]?.allPosts, isActive: true, position: 0 },
+    {
+      title: locales[selectedLanguage]?.taggedPosts,
+      isActive: false,
+      position: 1,
+    },
+  ];
 
   return (
-    <TabView
-      navigationState={{ index, routes }}
-      renderScene={renderScene}
-      onIndexChange={setIndex}
-      initialLayout={{ width: layout.width }}
-      renderTabBar={(props) => (
-        <TabBar
-          {...props}
-          indicatorStyle={{ backgroundColor: textColor }}
-          style={{ backgroundColor: backgroundColor }}
-          labelStyle={{ color: textColor }}
-        />
-      )}
-      style={{ marginTop: 10 }}
-    />
+    <SwipeComponent style={{ marginTop: 10 }} navbarList={navbarList}>
+      {/* Render your tab content here */}
+      <UserPostList />
+      <UserTagedPostList />
+    </SwipeComponent>
   );
 };
 

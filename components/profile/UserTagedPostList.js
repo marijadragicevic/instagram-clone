@@ -1,4 +1,3 @@
-import React from "react";
 import Gallery from "../ui/Gallery";
 import { useNavigation } from "@react-navigation/native";
 import { locales } from "../../locales/Locales";
@@ -16,7 +15,6 @@ const UserTagedPostList = () => {
       title: locales[selectedLanguage]?.tagged,
     });
   };
-
   return <Gallery onPress={handlePressOnImage} />;
 };
 

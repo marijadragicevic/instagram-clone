@@ -1,12 +1,11 @@
-import { View, StyleSheet } from "react-native";
-import React, { useContext, useLayoutEffect } from "react";
+import { useContext, useLayoutEffect } from "react";
+import { StyleSheet, FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { ThemeContext } from "../../context/ThemeContext";
 import { getThemeColors } from "../../utilities/theme";
 import ProfileHeader from "./ProfileHeader";
 import ProfileGallery from "./ProfileGallery";
 import { loggedInUser } from "../../screens/MessagesScreen";
-import IconButton from "../ui/IconButton";
 import { Picker } from "@react-native-picker/picker";
 import { useDispatch, useSelector } from "react-redux";
 import { getLanguage, setLanguage } from "../../redux/slices/Translation";
@@ -44,10 +43,11 @@ const Profile = () => {
   }, [navigation, theme, route, language]);
 
   return (
-    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
-      <ProfileHeader user={currentUser} />
-      <ProfileGallery />
-    </View>
+    <FlatList
+      style={[styles.container, { backgroundColor: backgroundColor }]}
+      ListHeaderComponent={() => <ProfileHeader user={currentUser} />}
+      ListFooterComponent={() => <ProfileGallery />}
+    />
   );
 };
 
