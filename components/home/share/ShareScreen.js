@@ -1,5 +1,6 @@
 import { useContext, useEffect } from "react";
-import { FlatList, View, StyleSheet, Animated } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import { StyleSheet, Animated } from "react-native";
 
 import { USERS } from "../../../data/users";
 import { locales } from "../../../locales/Locales";
@@ -7,10 +8,10 @@ import { locales } from "../../../locales/Locales";
 import SearchForm from "../../search/SearchForm";
 import ResultList from "../../search/ResultList";
 import Button from "../../ui/Button";
+import Overlay from "../../ui/Overlay";
 
 import { getThemeColors } from "../../../utilities/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
-import { useDispatch, useSelector } from "react-redux";
 import { getIsVisible, setVisibility } from "../../../redux/slices/Modals";
 import { getLanguage } from "../../../redux/slices/Translation";
 import { COLORS } from "../../../constants/Colors";
@@ -59,32 +60,35 @@ const ShareScreen = ({}) => {
 
   return (
     isVisible && (
-      <Animated.View
-        style={[
-          styles.container,
-          animatedStyle,
-          { backgroundColor: backgroundColor },
-        ]}
-      >
-        <SearchForm
-          type="share"
-          style={styles.search}
-          setSearchResult={handleSearch}
-        />
-        <ResultList
-          type="share"
-          list={USERS}
-          style={{ backgroundColor: backgroundColor }}
-        />
-        <Button
-          style={styles.button}
-          styleText={{ color: COLORS.global.white }}
-          onPress={() => activateAnimation(0)}
-          // isDisabled
+      <>
+        <Overlay />
+        <Animated.View
+          style={[
+            styles.container,
+            animatedStyle,
+            { backgroundColor: backgroundColor },
+          ]}
         >
-          {locales[selectedLanguage]?.send}
-        </Button>
-      </Animated.View>
+          <SearchForm
+            type="share"
+            style={styles.search}
+            setSearchResult={handleSearch}
+          />
+          <ResultList
+            type="share"
+            list={USERS}
+            style={{ backgroundColor: backgroundColor }}
+          />
+          <Button
+            style={styles.button}
+            styleText={{ color: COLORS.global.white }}
+            onPress={() => activateAnimation(0)}
+            // isDisabled
+          >
+            {locales[selectedLanguage]?.send}
+          </Button>
+        </Animated.View>
+      </>
     )
   );
 };
