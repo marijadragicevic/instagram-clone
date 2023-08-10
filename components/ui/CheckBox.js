@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { View, StyleSheet, Pressable, Text } from "react-native";
 
+import { Ionicons } from "@expo/vector-icons";
+
 import { COLORS } from "../../constants/Colors";
 
 const CheckBox = ({ style, number = 0, isSelected, type = "checkbox" }) => {
@@ -31,12 +33,22 @@ const CheckBox = ({ style, number = 0, isSelected, type = "checkbox" }) => {
           style={({ pressed }) => [
             styles.container,
             pressed && styles.pressed,
-            isChecked && styles.checked,
-            paddingHorizontal,
+            isChecked
+              ? { ...styles.checked, paddingVertical: 1, paddingHorizontal: 2 }
+              : paddingHorizontal,
           ]}
           onPress={() => setIsChecked(!isChecked)}
         >
-          <Text style={styles.text}>{isChecked && number}</Text>
+          {isChecked ? (
+            <Ionicons
+              name="checkmark"
+              color={COLORS.global.white}
+              // style={{ backgroundColor: "red" }}
+              size={20}
+            />
+          ) : (
+            <Text style={styles.text}></Text>
+          )}
         </Pressable>
       )}
     </View>

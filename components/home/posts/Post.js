@@ -24,7 +24,7 @@ const Post = ({ post, index }) => {
         useNativeDriver: true,
       }),
       Animated.timing(scaleValue, {
-        toValue: 0.2,
+        toValue: 0,
         duration: 150,
         useNativeDriver: true,
         delay: 200,

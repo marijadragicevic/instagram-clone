@@ -3,11 +3,12 @@ import ResultItem from "./ResultItem";
 import { getLanguage } from "../../redux/slices/Translation";
 import { useSelector } from "react-redux";
 
-const ResultList = ({ type, list, onDeleteHistoryItem }) => {
+const ResultList = ({ type, list, onDeleteHistoryItem, style }) => {
   const selectedLanguage = useSelector(getLanguage);
 
   return (
     <FlatList
+      style={style}
       data={list}
       keyExtractor={(_, index) => index}
       renderItem={({ item, index }) => (

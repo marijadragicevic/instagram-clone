@@ -1,6 +1,6 @@
 import { useContext, useEffect, useLayoutEffect, useState } from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import SearcForm from "../components/search/SearcForm";
+import SearchForm from "../components/search/SearchForm";
 import { getThemeColors } from "../utilities/theme";
 import { ThemeContext } from "../context/ThemeContext";
 import ResultList from "../components/search/ResultList";
@@ -28,7 +28,7 @@ const SearchScreen = ({ navigation }) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      header: () => <SearcForm setSearchResult={handleSearchResult} />,
+      header: () => <SearchForm setSearchResult={handleSearchResult} />,
     });
   }, [navigation]);
 

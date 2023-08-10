@@ -11,7 +11,7 @@ import { locales } from "../../locales/Locales";
 import { getLanguage } from "../../redux/slices/Translation";
 import { useSelector } from "react-redux";
 
-const SearcForm = ({ setSearchResult }) => {
+const SearchForm = ({ setSearchResult, type, style }) => {
   const { theme, isDarkLogo } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
@@ -29,7 +29,9 @@ const SearcForm = ({ setSearchResult }) => {
   };
 
   return (
-    <View style={[styles.container, { backgroundColor: backgroundColor }]}>
+    <View
+      style={[styles.container, style, { backgroundColor: backgroundColor }]}
+    >
       <Pressable
         style={[
           styles.innerContainer,
@@ -49,7 +51,7 @@ const SearcForm = ({ setSearchResult }) => {
         />
         <View style={[styles.iconContainer]}>
           <Ionicons
-            name="search"
+            name={type === "share" ? "md-person-add-outline" : "search"}
             style={[styles.icon]}
             size={20}
             color={textColor}
@@ -60,7 +62,7 @@ const SearcForm = ({ setSearchResult }) => {
   );
 };
 
-export default SearcForm;
+export default SearchForm;
 
 const styles = StyleSheet.create({
   container: { padding: 10, paddingTop: 40 },

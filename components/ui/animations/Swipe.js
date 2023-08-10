@@ -89,7 +89,7 @@ const SwipeComponent = ({
   );
 };
 
-const SwipeNavbar = ({ navbarList, onSelect }) => {
+const SwipeNavbar = ({ navbarList, onSelect, selectedPosition = 0 }) => {
   const { theme } = useContext(ThemeContext);
   const { textColor } = getThemeColors(theme);
 
@@ -100,7 +100,8 @@ const SwipeNavbar = ({ navbarList, onSelect }) => {
           <Pressable
             style={[
               style.navbarItem,
-              navbarItem?.isActive && style.active(textColor),
+              selectedPosition == navbarItem?.position &&
+                style.active(textColor),
             ]}
             key={index}
             onPress={() => {

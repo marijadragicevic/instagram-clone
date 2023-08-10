@@ -19,10 +19,9 @@ const ProfileGallery = () => {
   const selectedLanguage = useSelector(getLanguage);
 
   const navbarList = [
-    { title: locales[selectedLanguage]?.allPosts, isActive: true, position: 0 },
+    { title: locales[selectedLanguage]?.allPosts, position: 0 },
     {
       title: locales[selectedLanguage]?.taggedPosts,
-      isActive: false,
       position: 1,
     },
   ];
