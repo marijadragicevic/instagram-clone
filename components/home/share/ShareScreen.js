@@ -1,6 +1,6 @@
 import { useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { StyleSheet, Animated } from "react-native";
+import { StyleSheet, Animated, BackHandler } from "react-native";
 
 import { USERS } from "../../../data/users";
 import { locales } from "../../../locales/Locales";
@@ -57,6 +57,17 @@ const ShareScreen = ({}) => {
       activateAnimation(1);
     }
   }, [isVisible]);
+
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      "hardwareBackPress",
+      () => {
+        activateAnimation(0);
+      }
+    );
+
+    return () => backHandler.remove();
+  }, []);
 
   return (
     isVisible && (
