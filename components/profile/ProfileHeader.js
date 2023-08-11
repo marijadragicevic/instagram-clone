@@ -1,13 +1,12 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, Image } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
 import { getThemeColors } from "../../utilities/theme";
 import { ThemeContext } from "../../context/ThemeContext";
 
 import ButtonContainer from "./ButtonContainer";
+import StoryFrame from "../ui/StoryFrame";
 
-import { COLORS } from "../../constants/Colors";
 import { locales } from "../../locales/Locales";
 
 import { getLanguage } from "../../redux/slices/Translation";
@@ -23,33 +22,12 @@ const ProfileHeader = ({ user }) => {
     <>
       <View style={styles.outterContainer}>
         <View style={styles.container}>
-          <LinearGradient
-            colors={[
-              COLORS.global.lightYellow200,
-              COLORS.global.lightYellow600,
-              COLORS.global.lightYellow600,
-              COLORS.global.lightOrange600,
-              COLORS.global.lightRed400,
-              COLORS.global.lightRed800,
-              COLORS.global.pink300,
-              COLORS.global.pink500,
-              COLORS.global.pink500,
-              COLORS.global.purple500,
-            ]}
-            start={{ x: 0, y: 1 }}
-            end={{ x: 1, y: 0.5 }}
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              padding: 2,
-              borderRadius: 100,
-            }}
-          >
+          <StoryFrame>
             <Image
               source={require("../../assets/userImage.jpeg")}
               style={[styles.image, { borderColor: backgroundColor }]}
             />
-          </LinearGradient>
+          </StoryFrame>
           <View style={styles.infoContainer}>
             <View style={styles.infoInnerContainer}>
               <Text style={[styles.boldText, { color: textColor }]}>3</Text>
@@ -108,7 +86,6 @@ const styles = StyleSheet.create({
   infoInnerContainer: {
     flex: 1,
     alignItems: "center",
-    // backgroundColor: "red",
   },
   boldText: {
     fontSize: 18,

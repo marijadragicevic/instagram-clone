@@ -2,8 +2,7 @@ import React, { useContext, useState } from "react";
 import { View, TextInput, StyleSheet, Image } from "react-native";
 
 import Button from "../ui/Button";
-
-import { LinearGradient } from "expo-linear-gradient";
+import StoryFrame from "../ui/StoryFrame";
 
 import { COLORS } from "../../constants/Colors";
 import { locales } from "../../locales/Locales";
@@ -42,33 +41,12 @@ const AddComment = ({ isInputInFocus }) => {
         },
       ]}
     >
-      <LinearGradient
-        colors={[
-          COLORS.global.lightYellow200,
-          COLORS.global.lightYellow600,
-          COLORS.global.lightYellow600,
-          COLORS.global.lightOrange600,
-          COLORS.global.lightRed400,
-          COLORS.global.lightRed800,
-          COLORS.global.pink300,
-          COLORS.global.pink500,
-          COLORS.global.pink500,
-          COLORS.global.purple500,
-        ]}
-        start={{ x: 0, y: 1 }}
-        end={{ x: 1, y: 0.5 }}
-        style={{
-          alignItems: "center",
-          justifyContent: "center",
-          padding: 2,
-          borderRadius: 100,
-        }}
-      >
+      <StoryFrame>
         <Image
           style={[styles.image, { borderColor: backgroundColor }]}
           source={require("../../assets/userImage.jpeg")}
         />
-      </LinearGradient>
+      </StoryFrame>
       <TextInput
         value={comment.value}
         placeholder={locales[selectedLanguage]?.addNewComent + " USER's POST"}

@@ -1,10 +1,9 @@
-import { View, Text, Image, StyleSheet } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { getThemeColors } from "../../../utilities/theme";
 import { useContext } from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { getThemeColors } from "../../../utilities/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
-import { COLORS } from "../../../constants/Colors";
 import { formatText } from "../../../utilities/format";
+import StoryFrame from "../../ui/StoryFrame";
 
 const Story = ({ user, image, imageStyle, disableGradient }) => {
   const { theme } = useContext(ThemeContext);
@@ -20,33 +19,12 @@ const Story = ({ user, image, imageStyle, disableGradient }) => {
           style={[styles.image, imageStyle]}
         />
       ) : (
-        <LinearGradient
-          colors={[
-            COLORS.global.lightYellow200,
-            COLORS.global.lightYellow600,
-            COLORS.global.lightYellow600,
-            COLORS.global.lightOrange600,
-            COLORS.global.lightRed400,
-            COLORS.global.lightRed800,
-            COLORS.global.pink300,
-            COLORS.global.pink500,
-            COLORS.global.pink500,
-            COLORS.global.purple500,
-          ]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0.5 }}
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 2,
-            borderRadius: 100,
-          }}
-        >
+        <StoryFrame>
           <Image
             source={require("../../../assets/userImage.jpeg")}
             style={[styles.image, imageStyle, { borderColor: backgroundColor }]}
           />
-        </LinearGradient>
+        </StoryFrame>
       )}
       {user && (
         <Text style={{ color: textColor, fontSize: 12 }}>

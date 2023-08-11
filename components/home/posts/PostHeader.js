@@ -1,13 +1,11 @@
 import { useContext } from "react";
 import { StyleSheet, View, Text, Image } from "react-native";
 
-import { LinearGradient } from "expo-linear-gradient";
-
 import { getThemeColors } from "../../../utilities/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
 
 import IconButton from "../../ui/IconButton";
-import { COLORS } from "../../../constants/Colors";
+import StoryFrame from "../../ui/StoryFrame";
 
 const PostHeader = ({ profileImage, user }) => {
   const { theme } = useContext(ThemeContext);
@@ -16,33 +14,12 @@ const PostHeader = ({ profileImage, user }) => {
   return (
     <View style={styles.outerContainer}>
       <View style={styles.innerContainer}>
-        <LinearGradient
-          colors={[
-            COLORS.global.lightYellow200,
-            COLORS.global.lightYellow600,
-            COLORS.global.lightYellow600,
-            COLORS.global.lightOrange600,
-            COLORS.global.lightRed400,
-            COLORS.global.lightRed800,
-            COLORS.global.pink300,
-            COLORS.global.pink500,
-            COLORS.global.pink500,
-            COLORS.global.purple500,
-          ]}
-          start={{ x: 0, y: 1 }}
-          end={{ x: 1, y: 0.5 }}
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            padding: 2,
-            borderRadius: 100,
-          }}
-        >
+        <StoryFrame>
           <Image
             style={[styles.image, { borderColor: backgroundColor }]}
             source={require("../../../assets/userImage.jpeg")}
           />
-        </LinearGradient>
+        </StoryFrame>
         <Text style={[styles.text, { color: textColor }]}>{user}</Text>
       </View>
       {/* transform to button */}
