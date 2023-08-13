@@ -38,6 +38,7 @@ import PostListScreen from "../screens/PostListScreen";
 import CommentViewScreen from "../screens/CommentViewScreen";
 import AddStoryScreen from "../screens/AddStoryScreen";
 import ProfileSearchScreen from "../screens/ProfileSearchScreen";
+import StoriesScreen from "../screens/StoriesScreen";
 
 const BottomTabs = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -186,6 +187,11 @@ const Navigation = () => {
 
         {/* story screens */}
         <Stack.Screen name="AddStoryScreen" component={AddStoryScreen} />
+        <Stack.Screen
+          name="StoriesScreen"
+          component={StoriesScreen}
+          options={{ headerShown: false }}
+        />
 
         {/* message screens list,chat*/}
         <Stack.Screen name="MessagesScreen" component={MessagesScreen} />

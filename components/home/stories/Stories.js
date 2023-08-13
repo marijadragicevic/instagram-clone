@@ -1,7 +1,6 @@
 import { View, StyleSheet, FlatList } from "react-native";
 
 import Story from "./Story";
-import { COLORS } from "../../../constants/Colors";
 
 import { USERS } from "../../../data/users";
 import AddStoryIcon from "./AddStoryIcon";
@@ -19,11 +18,11 @@ const Stories = () => {
             return (
               <View style={{ flexDirection: "row", alignItems: "center" }}>
                 <AddStoryIcon />
-                <Story {...item} />
+                <Story {...item} id={index} />
               </View>
             );
           }
-          return <Story {...item} />;
+          return <Story {...item} id={index} />;
         }}
         keyExtractor={(item, index) => index}
       />

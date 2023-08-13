@@ -1,18 +1,28 @@
 import { useContext } from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { Text, Image, StyleSheet, Pressable } from "react-native";
 import { getThemeColors } from "../../../utilities/theme";
 import { ThemeContext } from "../../../context/ThemeContext";
 import { formatText } from "../../../utilities/format";
 import StoryFrame from "../../ui/StoryFrame";
+import { useNavigation } from "@react-navigation/native";
 
-const Story = ({ user, image, imageStyle, disableGradient }) => {
+const Story = ({ user, image, imageStyle, disableGradient, id }) => {
+  const navigation = useNavigation();
+
   const { theme } = useContext(ThemeContext);
   const { textColor, backgroundColor } = getThemeColors(theme);
 
   const formatedUserText = formatText(user);
 
+  const handlePress = () => {
+    navigation.navigate("StoriesScreen", { storyId: id });
+  };
+
   return (
-    <View style={styles.container}>
+    <Pressable
+      style={({ pressed }) => [styles.container, pressed && styles.pressed]}
+      onPress={handlePress}
+    >
       {disableGradient ? (
         <Image
           source={require("../../../assets/userImage.jpeg")}
@@ -31,7 +41,7 @@ const Story = ({ user, image, imageStyle, disableGradient }) => {
           {formatedUserText}
         </Text>
       )}
-    </View>
+    </Pressable>
   );
 };
 
@@ -49,5 +59,8 @@ const styles = StyleSheet.create({
     width: 70,
     borderRadius: 100,
     borderWidth: 3,
+  },
+  pressed: {
+    transform: [{ scale: 0.9 }],
   },
 });

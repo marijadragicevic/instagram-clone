@@ -1,4 +1,4 @@
-import { useContext, useMemo } from "react";
+import { useContext, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
   PanResponder,
@@ -16,18 +16,17 @@ const SwipeComponent = ({
   children,
   style,
   number = 2,
-  inputRange,
-  outputRange,
   showNavbar = true,
   navbarList,
 }) => {
-  const translationX = new Animated.Value(0);
+  const [selectedPosition, setSelectedPosition] = useState(0);
+  const translationX = useRef(new Animated.Value(0))?.current;
 
   const { width } = useWindowDimensions();
 
   const translateX = translationX.interpolate({
-    inputRange: inputRange || [0, 1],
-    outputRange: outputRange || [0, -width],
+    inputRange: Array.from({ length: number }, (_, i) => i),
+    outputRange: Array.from({ length: number }, (_, i) => -width * i),
   });
 
   const activateAnimation = (value) => {
@@ -35,7 +34,7 @@ const SwipeComponent = ({
       toValue: value,
       duration: 300,
       useNativeDriver: true,
-    }).start(() => {});
+    }).start();
   };
 
   const panResponder = useMemo(() => {
